@@ -1,0 +1,90 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+enum USER_TYPE {
+ Employer
+ JobSeeker
+}
+
+enum EXPERIENCE {
+  Junior
+  Intermediate
+  Senior
+  Lead
+  Principal
+}
+
+enum JOB_MODE {
+  Onsite
+  Remote
+  Hybrid
+}
+
+enum JOB_TYPE {
+  Contract
+  FullTime
+  PartTime
+}
+
+model Otp{
+  id          String  @default(cuid()) @id
+  user_id      String  @map("user_id")  
+  otp         String  
+  created_at   DateTime 
+  expires_at   DateTime  
+    
+  @@map(name:"otp")
+  user User @relation(fields:[user_id], references:[id], onDelete: Cascade)
+}
+
+model User{
+    id          String  @default(cuid()) @id
+    name        String?
+    password    String?
+    profile_picture       String?
+    email       String? @unique
+    user_type    USER_TYPE
+    created_at   DateTime  @default(now())
+    update_at   DateTime @default(now())
+    email_verified  DateTime? 
+    // accounts        Account[]
+    otp             Otp[]
+    jobs            Jobs[]
+    @@map(name:"users") 
+}
+
+model Jobs{
+  id                String @default(cuid()) @id
+  job_title         String
+  company_name      String
+  company_logo     String?
+  company_info      String?
+  created_at        DateTime @default(now())
+  salary            Int?
+  job_description   String
+  skills            String?
+  benefits           String?
+  location          String?
+  experience_level  EXPERIENCE?
+  job_type          JOB_TYPE?
+  job_mode          JOB_MODE?
+  mode_of_submission String?
+  user_id            String 
+  no_of_hires       Int?
+  user User @relation(fields:[user_id], references:[id], onDelete: Cascade)
+  
+  @@map(name:"jobs") 
+
+}

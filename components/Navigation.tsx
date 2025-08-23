@@ -1,0 +1,56 @@
+import { Button } from "@/components/ui/button";
+// import { useAppDispatch, useAppSelector } from "@/lib/store/hook";
+import { routes } from "@/utils/routes";
+import { Bell } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import Logo from "../assets/logo-f.svg";
+
+export const Navigation = () => {
+  //   const { notification } = useAppSelector((state) => state.rootReducer.jobs);
+  //   const dispatch = useAppDispatch();
+
+  //   useEffect(() => {
+  //     if (typeof window !== "undefined") {
+  //       const notification = localStorage.getItem("notification")!;
+  //       if (JSON.parse(notification)) {
+  //         dispatch(setNotification());
+  //       }
+  //     }
+  //   }, []);
+
+  //   const clearNotification = () => {
+  //     if (typeof window !== "undefined") {
+  //       localStorage.removeItem("notification");
+  //       dispatch(removeNotification());
+  //     }
+  //   };
+
+  return (
+    <div className="h-[10vh] flex items-center justify-center bg-white z-20">
+      <div className="w-[95%] flex justify-between items-center">
+        <Link href="/">
+          <Image src={Logo} alt="logo" className="w-[100px]" />
+        </Link>
+
+        <div className="flex items-center gap-5">
+          <Link
+            href="/notification"
+            //    onClick={clearNotification}
+          >
+            <div className="cursor-pointer rounded-full border-2 border-gray-300 p-2">
+              <Bell size={17} />
+              {/* {notification && (
+                <div className="h-3 w-3 bg-red-500 rounded-full text-[8px] text-red-500 font-bold absolute top-5 md:top-6 z-20 right-[110px] md:right-[125px]"></div>
+              )} */}
+            </div>
+          </Link>
+
+          <Button className="bg-deepBlue hover:bg-lightBlue transition-all ease-in-out duration-500">
+            <Link href={routes.login}>login</Link>
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
