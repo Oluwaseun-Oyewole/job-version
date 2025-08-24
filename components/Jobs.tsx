@@ -1,21 +1,11 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useGetJobs } from "@/services/queries";
 import { JobParams } from "@/services/types";
 import { useJobberStore } from "@/store";
-import { experience, jobType, position, sortBy } from "@/utils/constants";
 import { useEffect, useState } from "react";
 import Job from "./Job";
 import PaginationWrapper from "./Pagination";
 import { JobSearch } from "./Search";
-import SliderComponent from "./Slider";
 
 const Jobs = () => {
   const [params, setParams] = useState<JobParams>({
@@ -236,103 +226,6 @@ const Jobs = () => {
       <div className="mx-4 flex flex-col gap-3 overflow-y-scroll h-[90vh]">
         <div className="bg-lightGray bg-transparent z-10">
           <JobSearch setParams={setParams} params={params} />
-        </div>
-
-        <div className="grid grid-cols-2 items-center gap-3 mt-5 md:hidden">
-          <Select
-          //   onValueChange={(e) => handleRadioChange(e)}
-          >
-            <SelectTrigger className="w-full py-7 pl-9">
-              <SelectValue placeholder="Date Posted" />
-            </SelectTrigger>
-            <SelectContent>
-              {sortBy?.map((sort) => {
-                return (
-                  <SelectItem
-                    key={sort.id}
-                    value={sort.value}
-                    className="cursor-pointer"
-                  >
-                    {sort.label}
-                  </SelectItem>
-                );
-              })}
-            </SelectContent>
-          </Select>
-          <Select>
-            <SelectTrigger className="w-full py-7 pl-9">
-              <SelectValue placeholder="Job Type" />
-            </SelectTrigger>
-            <SelectContent>
-              {jobType?.map((sort) => {
-                return (
-                  <SelectItem
-                    key={sort.id}
-                    value={sort.value}
-                    className="cursor-pointer"
-                  >
-                    {sort.label}
-                  </SelectItem>
-                );
-              })}
-            </SelectContent>
-            <Select>
-              <SelectTrigger className="w-full py-7 pl-9">
-                <SelectValue placeholder="Experience" />
-              </SelectTrigger>
-              <SelectContent>
-                {experience?.map((sort) => {
-                  return (
-                    <SelectItem
-                      key={sort.id}
-                      value={sort.value}
-                      className="cursor-pointer"
-                    >
-                      {sort.label}
-                    </SelectItem>
-                  );
-                })}
-              </SelectContent>
-            </Select>
-            <Select>
-              <SelectTrigger className="w-full py-7 pl-9">
-                <SelectValue placeholder="Position" />
-              </SelectTrigger>
-              <SelectContent>
-                {position?.map((sort) => {
-                  return (
-                    <SelectItem
-                      key={sort.id}
-                      value={sort.value}
-                      className="cursor-pointer"
-                    >
-                      {sort.label}
-                    </SelectItem>
-                  );
-                })}
-              </SelectContent>
-            </Select>
-          </Select>
-        </div>
-
-        <div className="md:hidden">
-          <div className="">
-            <div className="flex items-center justify-between pb-5">
-              <h2 className="font-bold">Salary Range</h2>
-              <Button
-                className="bg-transparent text-deepBlue text-sm"
-                // onClick={filterByPriceRange}
-              >
-                Apply
-              </Button>
-            </div>
-            <div className="w-[90%] mx-auto">
-              <SliderComponent
-                sliderRange={sliderRange}
-                setSliderRange={setSliderRange}
-              />
-            </div>
-          </div>
         </div>
 
         <div className="pt-6">

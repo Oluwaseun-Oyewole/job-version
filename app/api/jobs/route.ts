@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { EXPERIENCE, JOB_MODE } from "@/app/generated/prisma";
 import prisma from "@/lib/prisma";
+import corsMiddleware from "@/middleware";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (req: NextRequest) => {
@@ -10,22 +11,20 @@ export const GET = async (req: NextRequest) => {
   const job_mode = searchParams.get("job_mode") as JOB_MODE;
   const job_type = searchParams.get("job_type");
   const location = searchParams.get("location");
-  const experience_level = searchParams.get("job_mode") as EXPERIENCE;
+  const experience_level = searchParams.get("experience_level") as EXPERIENCE;
   const searchQuery = searchParams.get("searchQuery")?.toString();
+
+  await corsMiddleware();
 
   if (!limit || limit === 0) limit += 4;
   if (page <= 0) page += 1;
   try {
     const where: any = {};
-
     if (job_mode && Object.values(JOB_MODE)?.includes(job_mode))
       where.job_mode = job_mode;
-
     if (job_type) where.job_type = job_type;
+    if (experience_level) where.experience_level = experience_level;
 
-    if (experience_level) {
-      where.experience_level = experience_level;
-    }
     if (location) {
       where.location = {
         contains: location,
@@ -75,6 +74,12 @@ export const GET = async (req: NextRequest) => {
           page,
           limit,
           status: 200,
+        },
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type",
+          "Content-Type": "application/json",
         },
       },
       { status: 200 }

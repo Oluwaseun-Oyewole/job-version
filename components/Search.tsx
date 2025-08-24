@@ -194,8 +194,8 @@ export const JobSearch = ({
 
   return (
     <div>
-      <div className="flex items-center gap-5">
-        <div className="grid gap-3 lg:gap-0 md:grid-cols-[60%_40%] items-center lg:bg-white rounded-sm flex-1">
+      <div className="flex flex-col md:flex-row items-center gap-5">
+        <div className="grid md:gap-3 lg:gap-0 w-full md:grid-cols-[60%_40%] items-center bg-white rounded-sm flex-1">
           <Input
             value={values.searchQuery}
             onChangeCapture={handleInputChange}
@@ -213,7 +213,7 @@ export const JobSearch = ({
                 setParams((prev) => ({ ...prev, job_mode: value }));
               }}
             >
-              <SelectTrigger className="w-full pl-9 font-medium">
+              <SelectTrigger className="w-full pl-8 text-sm !h-[50px] font-[400]">
                 <SelectValue placeholder="Select job mode" />
               </SelectTrigger>
               <SelectContent>

@@ -1,4 +1,5 @@
 // import { useAppDispatch, useAppSelector } from "@/lib/store/hook";
+import { routes } from "@/utils/routes";
 import { Bell } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -27,13 +28,13 @@ export const Navigation = () => {
   return (
     <div className="h-[10vh] flex items-center justify-center bg-white z-20">
       <div className="w-[95%] flex justify-between items-center">
-        <Link href="/">
+        <Link href={routes.home}>
           <Image src={Logo} alt="logo" className="w-[100px]" />
         </Link>
 
         <div className="flex items-center gap-5">
           <Link
-            href="/notification"
+            href={routes.notification}
             //    onClick={clearNotification}
           >
             <div className="cursor-pointer rounded-full border-2 border-gray-300 p-2">

@@ -1,20 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-import { experience, position } from "@/utils/constants";
-import { ListFilter } from "lucide-react";
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { experience, jobType, position, sortBy } from "@/utils/constants";
+import classNames from "classnames";
 import "rc-slider/assets/index.css";
 import { ChangeEvent, useState } from "react";
-import { Filter } from "./Filter";
+import SliderComponent from "./Slider";
 
 const CheckBoxInput = ({
   name,
@@ -45,7 +44,7 @@ const CheckBoxInput = ({
   );
 };
 
-export const JobsFilter = () => {
+export const Filter = () => {
   //   const searchParams = useSearchParams();
   //   const router = useRouter();
   //   const { country, isSearchTrigger } = useAppSelector(
@@ -347,30 +346,153 @@ export const JobsFilter = () => {
   // };
 
   return (
-    <>
-      <div className="md:hidden">
-        <Drawer>
-          <div className="flex justify-end">
-            <DrawerTrigger className="text-right flex justify-end pb-3 px-5">
-              <ListFilter color="#0049fc" />
-            </DrawerTrigger>
+    <div className="bg-white shadow-md rounded-lg pb-8 px-5 md:h-[84vh] overflow-y-scroll">
+      <div
+        className={classNames(
+          classes.flexJustifyBetween,
+          "pb-6 border-b-2 border-lightGrey sticky top-0 py-8 left-0 bg-white"
+        )}
+      >
+        <h2 className="font-bold text-lg">Filters</h2>
+        <Button
+          className="text-sm text-blue-500 !bg-transparent"
+          //   onClick={filterReset}
+        >
+          Reset All
+        </Button>
+      </div>
+      <div className={classNames(classes.border)}>
+        <h2 className="font-bold pb-5">Sort By</h2>
+        <div>
+          <RadioGroup
+            defaultValue={sortBy[0].value}
+            className="w-[92%] font-[300]"
+            // onValueChange={(e) => handleRadioChange(e)}
+          >
+            <div className="grid gap-3 grid-cols-[50%_50%] items-center">
+              {sortBy?.map((sort, index) => {
+                return (
+                  <div
+                    className={classNames(classes.flexCenterSpace)}
+                    key={index}
+                  >
+                    <RadioGroupItem
+                      value={`${sort.value}`}
+                      id={`${sort.value}`}
+                    />
+                    <Label
+                      htmlFor={`${sort.value}`}
+                      className="hidden lg:block"
+                    >
+                      {sort.label}
+                    </Label>
+
+                    <Label htmlFor="most-recent" className="block lg:hidden">
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger className="line-clamp-1">
+                            {sort.label.substring(0, 5) + "..."}
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>{sort.label}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </Label>
+                  </div>
+                );
+              })}
+            </div>
+          </RadioGroup>
+        </div>
+      </div>
+
+      <div className={classNames(classes.border)}>
+        <div className="w-[90%]">
+          <div className="flex items-center justify-between pb-5">
+            <h2 className="font-bold">Salary Range</h2>
+            <Button
+              className="bg-transparent hover:bg-transparent text-deepBlue text-sm !m-0 !p-0"
+              //   onClick={filterByPriceRange}
+            >
+              Apply
+            </Button>
           </div>
-          <DrawerContent>
-            <DrawerHeader>
-              <DrawerTitle>Filters</DrawerTitle>
-            </DrawerHeader>
-            <Filter />
-            <DrawerFooter>
-              <DrawerClose>
-                <Button variant="outline">Cancel</Button>
-              </DrawerClose>
-            </DrawerFooter>
-          </DrawerContent>
-        </Drawer>{" "}
+          <SliderComponent
+            sliderRange={sliderRange}
+            setSliderRange={setSliderRange}
+          />
+        </div>
       </div>
-      <div className="hidden md:block">
-        <Filter />
+      <div className={classNames(classes.border)}>
+        <h2 className="pb-4 font-bold">Job Type</h2>
+
+        <div className="w-[92%]">
+          <div className="grid grid-flow-cols grid-cols-[50%_50%] gap-3">
+            {jobType?.map((job, index) => {
+              return (
+                <div
+                  key={index}
+                  className={classNames(classes.flexJustifyBetween)}
+                >
+                  <div
+                    className={classNames(
+                      classes.flexCenterSpace,
+                      "space-x-0 gap-0"
+                    )}
+                  >
+                    <input
+                      id={job.value}
+                      type="checkbox"
+                      value={job.value}
+                      //   checked={isSelected(job.value)}
+                      //   onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      //     handleJobTypeChange(e)
+                      //   }
+                      className="h-[15px] w-[17px] focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
+                    />
+                    <Label htmlFor={job.value}>{job.label}</Label>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
-    </>
+      <div className="pt-6">
+        <h2 className="pb-4 font-bold">Experience</h2>
+        <div className="w-[92%]">
+          <div className="grid grid-flow-cols grid-cols-[50%_50%] gap-3">
+            {jobExperience?.map((job, index) => {
+              return (
+                <div
+                  className={classNames(classes.flexJustifyBetween)}
+                  key={index}
+                >
+                  <div
+                    className={classNames(
+                      classes.flexCenterSpace,
+                      "space-x-0 gap-1"
+                    )}
+                  >
+                    <CheckBoxInput
+                      name="experience"
+                      id={job.value}
+                      value={job.value}
+                      checked={job.checked}
+                      job={job}
+                      onChange={() => {}}
+                      //   onChange={handleJobExperienceChange}
+                    />
+
+                    <Label htmlFor={job.value}>{job.label}</Label>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
