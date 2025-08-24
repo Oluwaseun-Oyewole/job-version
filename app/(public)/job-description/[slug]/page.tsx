@@ -3,8 +3,10 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import Saved from "../../../../assets/fav.svg";
 
+//TODO remove any
 interface PageProps {
-  params: { slug: string };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  params: any;
 }
 
 export interface SavedJobInterface {
