@@ -12,12 +12,25 @@ export const truncate = (str: string, n: number): string => {
 export const dateFormat = (dateString: Date) => {
   dayjs.extend(relativeTime);
   const jobPostedAt = dayjs(dateString);
-  return jobPostedAt.fromNow();
+  return jobPostedAt?.fromNow();
 };
 
 export const capitalize = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
+
+// utils/slugify.ts
+export function slugify(text: string): string {
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w\-]+/g, "")
+    .replace(/\-\-+/g, "-")
+    .replace(/^-+/, "")
+    .replace(/-+$/, "");
+}
 
 export class Toastify {
   static success(message: string, options?: ToastOptions) {

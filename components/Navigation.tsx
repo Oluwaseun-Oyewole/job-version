@@ -1,6 +1,4 @@
-import { Button } from "@/components/ui/button";
 // import { useAppDispatch, useAppSelector } from "@/lib/store/hook";
-import { routes } from "@/utils/routes";
 import { Bell } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -45,10 +43,6 @@ export const Navigation = () => {
               )} */}
             </div>
           </Link>
-
-          <Button className="bg-deepBlue hover:bg-lightBlue transition-all ease-in-out duration-500">
-            <Link href={routes.login}>login</Link>
-          </Button>
         </div>
       </div>
     </div>

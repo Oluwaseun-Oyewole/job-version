@@ -8,6 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useGetJobs } from "@/services/queries";
+import { JobParams } from "@/services/types";
 import { useJobberStore } from "@/store";
 import { experience, jobType, position, sortBy } from "@/utils/constants";
 import { useEffect, useState } from "react";
@@ -17,7 +18,12 @@ import { JobSearch } from "./Search";
 import SliderComponent from "./Slider";
 
 const Jobs = () => {
-  const [params, setParams] = useState({ page: 1, limit: 10 });
+  const [params, setParams] = useState<JobParams>({
+    page: 1,
+    limit: 10,
+    searchQuery: undefined,
+    job_mode: undefined,
+  });
   const { data, isLoading, refetch, isSuccess } = useGetJobs(params);
   const { updateData, setIsLoading } = useJobberStore();
 
@@ -229,7 +235,7 @@ const Jobs = () => {
     <>
       <div className="mx-4 flex flex-col gap-3 overflow-y-scroll h-[90vh]">
         <div className="bg-lightGray bg-transparent z-10">
-          <JobSearch />
+          <JobSearch setParams={setParams} params={params} />
         </div>
 
         <div className="grid grid-cols-2 items-center gap-3 mt-5 md:hidden">
@@ -330,7 +336,7 @@ const Jobs = () => {
         </div>
 
         <div className="pt-6">
-          <div className="flex items-center justify-between pb-3">
+          <div className="flex items-center justify-end pb-3">
             {data?.jobs && data?.jobs?.length > 0 && (
               <PaginationWrapper
                 total={data?.total ?? 0}
@@ -342,9 +348,6 @@ const Jobs = () => {
                 onPrev={onPrev}
               />
             )}
-            <p className="text-sm text-gray-400">
-              {data?.jobs?.length} results found
-            </p>
           </div>
 
           <div className="lg:h-[70vh] overflow-y-scroll">

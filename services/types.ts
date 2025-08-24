@@ -1,8 +1,10 @@
 import { Experience, Job_type, JobMode } from "@/types";
 
 export type JobParams = {
-  page?: number;
-  limit?: number;
+  page: number;
+  limit: number;
+  searchQuery?: string | undefined;
+  job_mode?: string | undefined;
 };
 
 export type JobType = {
@@ -23,6 +25,7 @@ export type JobType = {
   mode_of_submission?: string;
   user_id: string;
   no_of_hires?: string;
+  slug: string;
 };
 
 export type JobResponse = {

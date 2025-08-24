@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { EXPERIENCE, JOB_MODE } from "@/app/generated/prisma";
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -5,20 +7,61 @@ export const GET = async (req: NextRequest) => {
   const { searchParams } = await new URL(req.url);
   let limit = Number(searchParams.get("limit"));
   let page = Number(searchParams.get("page"));
+  const job_mode = searchParams.get("job_mode") as JOB_MODE;
+  const job_type = searchParams.get("job_type");
   const location = searchParams.get("location");
+  const experience_level = searchParams.get("job_mode") as EXPERIENCE;
+  const searchQuery = searchParams.get("searchQuery")?.toString();
 
-  if (!limit || limit === 0) {
-    limit += 4;
-  }
-  if (page <= 0) {
-    page += 1;
-  }
-
+  if (!limit || limit === 0) limit += 4;
+  if (page <= 0) page += 1;
   try {
+    const where: any = {};
+
+    if (job_mode && Object.values(JOB_MODE)?.includes(job_mode))
+      where.job_mode = job_mode;
+
+    if (job_type) where.job_type = job_type;
+
+    if (experience_level) {
+      where.experience_level = experience_level;
+    }
+    if (location) {
+      where.location = {
+        contains: location,
+        mode: "insensitive" as const,
+      };
+    }
+
+    if (searchQuery) {
+      where.OR = [
+        {
+          job_title: {
+            contains: searchQuery,
+            mode: "insensitive" as const,
+          },
+        },
+        {
+          company_name: {
+            contains: searchQuery,
+            mode: "insensitive" as const,
+          },
+        },
+
+        {
+          location: {
+            contains: searchQuery,
+            mode: "insensitive" as const,
+          },
+        },
+      ];
+    }
+
     const jobs = await prisma.jobs.findMany({
-      where: { OR: [{ location }, { OR: [{}] }] },
+      where,
       skip: (page - 1) * limit,
       take: limit,
+      orderBy: { created_at: "desc" },
     });
     const total = await prisma.jobs.count();
     const totalPages = Math.ceil(total / limit) ?? 1;

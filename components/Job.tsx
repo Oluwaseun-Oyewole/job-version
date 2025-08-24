@@ -1,12 +1,11 @@
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { JobType } from "@/services/types";
 import { dateFormat, truncate } from "@/utils/helper";
+import { Dot, MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import Dollar from "../assets/dollar.svg";
-import Saved from "../assets/fav.svg";
 
 export interface SavedJobInterface {
   id: string;
@@ -97,14 +96,8 @@ const Job = ({
         {data?.map((job) => {
           return (
             <div key={job?.id}>
-              <Link href={`/job-description/${job?.id}`} className="">
-                <div
-                  className="mb-5 min-h-[250px] bg-white rounded-lg shadow-md hover:shadow-lg cursor-pointer xl:flex flex-col justify-between px-5 py-5"
-                  //   onClick={() => {
-                  //     dispatch(stopSearch());
-                  //     setJobId(job?.id);
-                  //   }}
-                >
+              <Link href={`/job-description/${job?.slug}`} className="">
+                <div className="mb-5 min-h-[230px] bg-white rounded-lg shadow-md hover:shadow-lg cursor-pointer xl:flex flex-col gap-4 px-5 py-5 font-[400]">
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-4">
                       {job?.company_logo && (
@@ -115,82 +108,52 @@ const Job = ({
                           height={50}
                         />
                       )}
+
+                      <h1 className="text-base">{job?.job_title}</h1>
+                    </div>
+                    <div className="flex gap-1 relative">
+                      <p className="font-[300] text-sm">{job?.company_name}</p>
                       <div>
-                        <h1 className="text-base">{job?.job_title}</h1>
-                        <div className="flex items-center gap-2">
-                          <p className="font-[300] text-sm py-1">
-                            {job?.company_name}
-                          </p>
-                          <div>
-                            <small className="text-red-500 text-[10px] border-[0.5px] border-red-500 px-2 ">
-                              New
-                            </small>
-                            {/* {days <= 1 && (
-                              <small className="text-red-500 text-[10px] border-[0.5px] border-red-500 px-2 ">
-                                New
-                              </small>
-                            )} */}
-                          </div>
-                        </div>
+                        {dateFormat(job?.created_at) !== "24 hours ago" && (
+                          <small className="text-red-500 text-[10px] rounded-lg border-[0.5px] border-red-500 px-2">
+                            New
+                          </small>
+                        )}
                       </div>
                     </div>
 
-                    <Button
-                      //   onClick={() =>
-                      //     savedJobToLocalStorage({
-                      //       id: job.id,
-                      //       jobTitle: job.jobTitle,
-                      //       companyName: job.companyName,
-                      //       location: job.location,
-                      //     })
-                      //   }
-                      className="!bg-transparent"
-                    >
-                      <Image src={Saved} alt="netflix" />
-                    </Button>
+                    {/* <div role="button" tabIndex={0}>
+                      <Image src={Saved} alt="saved" />
+                    </div> */}
+                  </div>
+
+                  <div className="flex items-center gap-2 justify-between text-sm">
+                    <div className="flex items-center gap-1">
+                      <MapPin size={12} />
+                      <p className="">{job?.location}</p>
+                    </div>
+                    <div className="flex items-center">
+                      <Dot />
+                      <h3 className=" bg-lightGray rounded-sm">
+                        {job?.job_type}
+                      </h3>
+                    </div>
                   </div>
 
                   <div>
-                    <p className="font-[400] text-xs">{job?.location}</p>
-                  </div>
-
-                  <div className="flex justify-between items-center w-[90%] font-[400] text-xs mt-2">
-                    <h3 className=" bg-lightGray rounded-sm py-2 px-4">
-                      {job?.job_type}
-                    </h3>
-                  </div>
-
-                  <div className="py-2">
-                    <p className="text-sm font-[300]">
-                      {truncate(job?.job_description, 70)}
+                    <p className="text-sm">
+                      {truncate(job?.job_description, 80)}
                     </p>
                   </div>
 
-                  <div className="flex justify-between items-center font-[400] text-sm">
+                  <div className="flex justify-between items-center  text-sm">
                     <div className="flex gap-2 items-center">
-                      <Image src={Dollar} alt="netflix" />
-                      <p className="text-[13px] font-[300]">
-                        &#36;{job?.salary}K/month
+                      <Image src={Dollar} alt="dollars" />
+                      <p className="text-xs ">
+                        &#36;{job?.salary?.toLocaleString()}K/month
                       </p>
                     </div>
-                    {dateFormat(job?.created_at)}
-                    <div>
-                      {/* <div className="text-sm font-[300]">
-                        {days > 0 ? (
-                          <p>
-                            {days} {days > 1 ? "days" : "day"} ago
-                          </p>
-                        ) : hours > 0 ? (
-                          <p>
-                            {hours} {hours > 1 ? "hrs" : "hr"} ago
-                          </p>
-                        ) : (
-                          <p>
-                            {minutes} {minutes > 1 ? "mins" : "mins"} ago
-                          </p>
-                        )}
-                      </div> */}
-                    </div>
+                    <p className="text-xs ">{dateFormat(job?.created_at)}</p>
                   </div>
                 </div>
               </Link>

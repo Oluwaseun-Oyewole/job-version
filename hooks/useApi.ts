@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// hooks/useApi.ts
+
 import api from "@/services/axios";
 import {
   useMutation,
@@ -8,21 +8,18 @@ import {
   UseQueryOptions,
 } from "@tanstack/react-query";
 
-// Generic response type
 export interface ApiResponse<T> {
   data: T;
   message?: string;
   status?: number;
 }
 
-// Error type
 export interface ApiError {
   status?: number;
   message?: string;
   errors?: Record<string, string[]>;
 }
 
-// GET request hook
 export function useApiQuery<T>(
   key: any[],
   url: string,
@@ -35,11 +32,11 @@ export function useApiQuery<T>(
       const response = await api.get<ApiResponse<T>>(url, { params });
       return response?.data && response?.data?.data;
     },
+    // refetchOnWindowFocus: false,
     ...options,
   });
 }
 
-// POST request hook
 export function useApiPost<T, V = any>(
   url: string,
   options?: Omit<UseMutationOptions<T, ApiError, V>, "mutationFn">
@@ -53,7 +50,6 @@ export function useApiPost<T, V = any>(
   });
 }
 
-// PUT request hook
 export function useApiPut<T, V = any>(
   url: string,
   options?: Omit<UseMutationOptions<T, ApiError, V>, "mutationFn">
@@ -67,7 +63,6 @@ export function useApiPut<T, V = any>(
   });
 }
 
-// DELETE request hook
 export function useApiDelete<T = void>(
   url: string,
   options?: Omit<UseMutationOptions<T, ApiError, void>, "mutationFn">

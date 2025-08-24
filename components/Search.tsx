@@ -7,8 +7,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Form, Formik } from "formik";
-import { MapPin } from "lucide-react";
+import { JobParams } from "@/services/types";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useDebouncedCallback } from "use-debounce";
 
 type IState = {
   name: string;
@@ -26,7 +27,14 @@ type IState = {
 //   searchLocation?: string;
 // };
 
-export const JobSearch = () => {
+export const JobSearch = ({
+  params,
+  setParams,
+}: {
+  params: JobParams;
+  setParams: Dispatch<SetStateAction<JobParams>>;
+}) => {
+  const [values, setValues] = useState({ searchQuery: "", job_mode: "" });
   //   const searchParams = useSearchParams();
   //   const dispatch = useAppDispatch();
   //   const router = useRouter();
@@ -149,82 +157,88 @@ export const JobSearch = () => {
   //     }
   //   }, [searchController]);
 
+  const debouncedSearch = useDebouncedCallback((value: string) => {
+    performSearch(value);
+    return;
+  }, 300);
+
+  const performSearch = async (query: string) => {
+    setValues((prev) => ({ ...prev, searchQuery: query }));
+    setParams((prev) => ({ ...prev, searchQuery: query }));
+  };
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setValues((prev) => ({ ...prev, searchQuery: value }));
+    debouncedSearch(value);
+  };
+
+  useEffect(() => {
+    if (!Object.values(values).length)
+      setParams({
+        page: 1,
+        limit: 4,
+        searchQuery: undefined,
+        job_mode: undefined,
+      });
+  }, [setParams, params]);
+
+  const clearFilters = () => {
+    setValues({ job_mode: "", searchQuery: "" });
+    setParams({
+      page: 1,
+      limit: 4,
+      searchQuery: undefined,
+      job_mode: undefined,
+    });
+  };
+
   return (
     <div>
-      <Formik
-        initialValues={{
-          search: "",
-          location: "",
-        }}
-        onSubmit={() => {}}
-        // onSubmit={onSubmit}
-      >
-        {(formik) => {
-          return (
-            <Form className="grid gap-3 lg:gap-0 lg:grid-flow-col lg:grid-cols-[85%_15%] items-center bg-lightGray">
-              <div className="grid gap-3 lg:gap-0 md:grid-cols-[60%_40%] items-center lg:bg-white rounded-sm">
-                <Input
-                  name="search"
-                  type="search"
-                  value={formik.values.search}
-                  className="autocomplete-input h-[52px] w-full px-8 rounded-lg !border-none font-[400] placeholder:!text-sm placeholder:!text-gray-500 outline-none"
-                  onChange={formik.handleChange}
-                  autoComplete="off"
-                  placeholder="Search by job title, company"
-                />
-                <div className="relative">
-                  <Select
-                    name="location"
-                    value={formik.values.location}
-                    onValueChange={(value: string) => {
-                      formik.setFieldValue("location", value);
-                    }}
-                  >
-                    <SelectTrigger className="w-full pl-9 font-medium">
-                      <SelectValue placeholder="select location" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Remote" className="font-light">
-                        Remote
-                      </SelectItem>
-
-                      {/* {states?.map((state: IState, index) => {
-                        const validatedSchema =
-                          countryByNameValidationSchema.safeParse(state);
-                        const removeState = state.name
-                          .split(" ")
-                          .filter((item) => item !== "State")
-                          .join(" ");
-                        if (!validatedSchema.success) return;
-                        return (
-                          <SelectItem
-                            key={index}
-                            value={`${removeState}`}
-                            className="font-light"
-                          >
-                            {state?.name}
-                          </SelectItem>
-                        );
-                      })} */}
-                    </SelectContent>
-                  </Select>
-
-                  <div className="flex gap-3 absolute top-[11px] -left-3 px-6 ">
-                    <MapPin size={17} fontWeight={200} color="black" />
-                  </div>
-                </div>
-              </div>
-              <Button
-                type="submit"
-                disabled={!formik.values.location && !formik.values.search}
-                className="bg-deepBlue h-[45px] lg:ml-5 hover:bg-lightBlue rounded-sm"
-              >
-                Search
-              </Button>
-            </Form>
-          );
-        }}
-      </Formik>
+      <div className="flex items-center gap-5">
+        <div className="grid gap-3 lg:gap-0 md:grid-cols-[60%_40%] items-center lg:bg-white rounded-sm flex-1">
+          <Input
+            value={values.searchQuery}
+            onChangeCapture={handleInputChange}
+            type="search"
+            className="autocomplete-input h-[52px] w-full px-8 rounded-lg !border-none font-[400] placeholder:!text-sm placeholder:!text-gray-500 outline-none"
+            onChange={() => {}}
+            autoComplete="off"
+            placeholder="Search by job title, company"
+          />
+          <div className="relative">
+            <Select
+              value={values.job_mode}
+              onValueChange={(value: string) => {
+                setValues((prev) => ({ ...prev, job_mode: value }));
+                setParams((prev) => ({ ...prev, job_mode: value }));
+              }}
+            >
+              <SelectTrigger className="w-full pl-9 font-medium">
+                <SelectValue placeholder="Select job mode" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Onsite" className="font-light">
+                  Onsite
+                </SelectItem>
+                <SelectItem value="Hybrid" className="font-light">
+                  Hybrid
+                </SelectItem>
+                <SelectItem value="Remote" className="font-light">
+                  Remote
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+        {(params?.job_mode || params?.searchQuery) && (
+          <Button
+            className="bg-deepBlue h-[45px] lg:ml-5 hover:bg-lightBlue rounded-sm"
+            onClick={clearFilters}
+          >
+            Clear filter(s)
+          </Button>
+        )}
+      </div>
     </div>
   );
 };
