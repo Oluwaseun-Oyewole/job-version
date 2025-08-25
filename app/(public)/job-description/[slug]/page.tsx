@@ -1,3 +1,4 @@
+import GoBack from "@/components/Back";
 import prisma from "@/lib/prisma";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -43,7 +44,8 @@ const JobDetails = async ({ params }: PageProps) => {
   }
 
   return (
-    <div className=" bg-white max-w-3xl mx-auto mt-5 p-10">
+    <div className=" bg-white max-w-3xl mx-auto my-5 p-10 rounded-md">
+      <GoBack />{" "}
       <div className="flex justify-between">
         <div className="flex gap-4 sticky top-0 left-0">
           <h1 className="font-extrabold text-2xl">{job?.job_title}</h1>

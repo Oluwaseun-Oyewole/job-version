@@ -85,10 +85,14 @@ export const GET = async (req: NextRequest) => {
       { status: 200 }
     );
   } catch (error) {
-    console.log("errors - ", error);
     return NextResponse.json(
       { message: "Oops something went wrong" },
       { status: 501 }
     );
   }
 };
+
+// export const GET = withCors(handler);
+// export const OPTIONS = withCors(
+//   async () => new NextResponse(null, { status: 200 })
+// );

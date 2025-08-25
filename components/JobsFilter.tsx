@@ -355,7 +355,7 @@ export const JobsFilter = () => {
               <ListFilter color="#0049fc" />
             </DrawerTrigger>
           </div>
-          <DrawerContent>
+          <DrawerContent className="px-6">
             <DrawerHeader>
               <DrawerTitle>Filters</DrawerTitle>
             </DrawerHeader>

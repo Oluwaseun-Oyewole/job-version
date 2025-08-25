@@ -1,21 +1,39 @@
 "use client";
+import { useUrlSearchParams } from "@/hooks/useUrlQuery";
 import { useGetJobs } from "@/services/queries";
 import { JobParams } from "@/services/types";
 import { useJobberStore } from "@/store";
+import { SEARCHPARAMS_QUERIES } from "@/utils/constants";
 import { useEffect, useState } from "react";
 import Job from "./Job";
 import PaginationWrapper from "./Pagination";
 import { JobSearch } from "./Search";
 
 const Jobs = () => {
+  const { getParam } = useUrlSearchParams();
+  const searchQuery = getParam(SEARCHPARAMS_QUERIES.search);
+  const job_mode = getParam(SEARCHPARAMS_QUERIES.job_mode);
+  const page = Number(getParam(SEARCHPARAMS_QUERIES.page));
+
+  const limit = Number(getParam(SEARCHPARAMS_QUERIES.limit));
+
   const [params, setParams] = useState<JobParams>({
-    page: 1,
-    limit: 10,
-    searchQuery: undefined,
-    job_mode: undefined,
+    page: page > 0 ? page : 1,
+    limit: limit > 0 ? limit : 5,
+    searchQuery: searchQuery ? searchQuery : undefined,
+    job_mode: job_mode ? job_mode : undefined,
   });
+
   const { data, isLoading, refetch, isSuccess } = useGetJobs(params);
   const { updateData, setIsLoading } = useJobberStore();
+
+  // useEffect(() => {
+  //   if (isNaN(page)) removeParam(SEARCHPARAMS_QUERIES.page);
+  //   if (limit === 0 || isNaN(limit)) removeParam(SEARCHPARAMS_QUERIES.limit);
+  //   if (job_mode === "null" || !job_mode)
+  //     removeParam(SEARCHPARAMS_QUERIES.job_mode);
+  //   if (searchQuery === null) removeParam(SEARCHPARAMS_QUERIES.search);
+  // }, []);
 
   useEffect(() => {
     if (isSuccess) {
@@ -30,10 +48,7 @@ const Jobs = () => {
   const onPrev = () => {
     return setParams((prev) => ({ ...prev, page: params?.page - 1 }));
   };
-  //   const { isPaginate, isLoading, country, isSearchTrigger } = useAppSelector(
-  //     (state) => state.rootReducer.jobs
-  //   );
-  //   const data: any = useAppSelector((state) => state.rootReducer.jobs.data);
+
   const [sliderRange, setSliderRange] = useState([500, 10000]);
   //   const searchParams = useSearchParams();
   //   const page = +searchParams.get("page")!;
@@ -71,20 +86,6 @@ const Jobs = () => {
   //       !slider.price_min ||
   //       !slider.price_max ||
   //       !slider.location,
-  //   });
-
-  //   const [myState, setState] = useState({
-  //     resultsPerPage: 0,
-  //     page: 0,
-  //     location: "",
-  //   });
-  //   useGetAllJobsQuery(myState, {
-  //     skip:
-  //       !myState.page ||
-  //       !myState.resultsPerPage ||
-  //       !myState.location ||
-  //       isPaginate ||
-  //       isSearchTrigger,
   //   });
 
   //   type CheckboxStateType = {
@@ -222,33 +223,31 @@ const Jobs = () => {
   //   };
 
   return (
-    <>
-      <div className="mx-4 flex flex-col gap-3 overflow-y-scroll h-[90vh]">
-        <div className="bg-lightGray bg-transparent z-10">
-          <JobSearch setParams={setParams} params={params} />
+    <div className="flex flex-col gap-3 overflow-y-scroll">
+      <div className="bg-lightGray bg-transparent z-10">
+        <JobSearch setParams={setParams} params={params} />
+      </div>
+
+      <div className="pt-6">
+        <div className="flex items-center justify-end pb-3">
+          {data?.jobs && data?.jobs?.length > 0 && (
+            <PaginationWrapper
+              total={data?.total ?? 0}
+              resultsPerPage={data?.limit ?? 4}
+              totalResults={data?.total ?? 0}
+              page={data?.page ?? 1}
+              totalPages={data?.totalPages ?? 0}
+              onNext={onNext}
+              onPrev={onPrev}
+            />
+          )}
         </div>
 
-        <div className="pt-6">
-          <div className="flex items-center justify-end pb-3">
-            {data?.jobs && data?.jobs?.length > 0 && (
-              <PaginationWrapper
-                total={data?.total ?? 0}
-                resultsPerPage={data?.limit ?? 4}
-                totalResults={data?.total ?? 0}
-                page={data?.page ?? 1}
-                totalPages={data?.totalPages ?? 0}
-                onNext={onNext}
-                onPrev={onPrev}
-              />
-            )}
-          </div>
-
-          <div className="lg:h-[70vh] overflow-y-scroll">
-            <Job data={data?.jobs} isLoading={isLoading} refetch={refetch} />
-          </div>
+        <div className="overflow-y-scroll">
+          <Job data={data?.jobs} isLoading={isLoading} refetch={refetch} />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -6,10 +6,10 @@ import { Navigation } from "./Navigation";
 
 const AllJobs = () => {
   return (
-    <div className="bg-gray-100">
+    <div className="h-screen flex flex-col gap-7">
       <Navigation />
-      <div className="flex items-center justify-center py-8">
-        <div className="w-[95%] grid grid-items-center lg:justify-center xl:grid-flow-col md:grid-cols-[35%_65%] xl:grid-cols-[20%_55%_25%]">
+      <div className="flex items-center justify-center px-4 lg:px-12">
+        <div className="w-[95%] grid grid-items-center lg:justify-center xl:grid-flow-col md:grid-cols-[35%_65%] xl:grid-cols-[25%_55%_25%] gap-4">
           <JobsFilter />
           <Jobs />
           <JobDetails />

@@ -127,9 +127,9 @@
   }
 }
 
-body {
+/* body {
   overflow: hidden;
-}
+} */
 
 .border__bottom {
   border-bottom: 2px #f0f0f5 solid;

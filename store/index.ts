@@ -11,7 +11,7 @@ export interface InitialState {
 
 export const useJobberStore = create(
   immer<InitialState>((set) => ({
-    isLoading: true,
+    isLoading: false,
     data: [],
     updateData(data) {
       set((state) => {

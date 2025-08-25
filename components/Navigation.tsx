@@ -26,8 +26,8 @@ export const Navigation = () => {
   //   };
 
   return (
-    <div className="h-[10vh] flex items-center justify-center bg-white z-20">
-      <div className="w-[95%] flex justify-between items-center">
+    <div className="h-[10vh] flex items-center justify-center bg-white z-20 px-4 lg:px-12 sticky top-0 left-0">
+      <div className="flex justify-between items-center w-full">
         <Link href={routes.home}>
           <Image src={Logo} alt="logo" className="w-[100px]" />
         </Link>

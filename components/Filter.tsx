@@ -350,7 +350,7 @@ export const Filter = () => {
       <div
         className={classNames(
           classes.flexJustifyBetween,
-          "pb-6 border-b-2 border-lightGrey sticky top-0 py-8 left-0 bg-white"
+          "pb-6 border-b-2 border-gray-100 md:pt-8 left-0 bg-white"
         )}
       >
         <h2 className="font-bold text-lg">Filters</h2>

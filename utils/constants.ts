@@ -29,3 +29,10 @@ export const sortBy = [
 export const COOKIES_KEYS = {
   TOKEN: "token",
 };
+
+export const SEARCHPARAMS_QUERIES = {
+  search: "searchQuery",
+  job_mode: "job_mode",
+  page: "page",
+  limit: "limit",
+};

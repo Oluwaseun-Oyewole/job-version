@@ -87,3 +87,14 @@ export function removeFromStorage(key: string) {
     return error;
   }
 }
+
+export const formatCurrency = (
+  amount: number,
+  currencyCode?: string,
+  locale = "en-US"
+) => {
+  return new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: currencyCode ?? "USD",
+  }).format(amount);
+};

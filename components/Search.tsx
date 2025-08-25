@@ -7,25 +7,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useUrlSearchParams } from "@/hooks/useUrlQuery";
 import { JobParams } from "@/services/types";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { SEARCHPARAMS_QUERIES } from "@/utils/constants";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
-
-type IState = {
-  name: string;
-  status_code: string;
-};
-
-// type ISearch = {
-//   searchTerm: string;
-// };
-// type ISearchType = {
-//   resultsPerPage: number;
-//   page: number;
-//   searchQuery?: string;
-//   location: string;
-//   searchLocation?: string;
-// };
 
 export const JobSearch = ({
   params,
@@ -34,135 +20,19 @@ export const JobSearch = ({
   params: JobParams;
   setParams: Dispatch<SetStateAction<JobParams>>;
 }) => {
-  const [values, setValues] = useState({ searchQuery: "", job_mode: "" });
-  //   const searchParams = useSearchParams();
-  //   const dispatch = useAppDispatch();
-  //   const router = useRouter();
-  //   const { states, country } = useAppSelector((state) => state.rootReducer.jobs);
-  //   const [searchController, setSearchController] = useState(false);
-  //   const page = +searchParams.get("page")!;
-  //   const resultsPerPage = +searchParams.get("resultsPerPage")!;
-
-  //   const updateURLFromSearchQuery = useDebouncedCallback(
-  //     (query: {
-  //       search: string;
-  //       searchLocation: string;
-  //       page: number;
-  //       resultsPerPage: number;
-  //     }) => {
-  //       const params = new URLSearchParams(searchParams);
-  //       params.set("page", query.page.toString());
-  //       params.set("resultsPerPage", query.resultsPerPage.toString());
-  //       if (query.searchLocation && query.search) {
-  //         params.set("query", query.search);
-  //         params.set("location", query.searchLocation);
-  //       } else if (query.search) {
-  //         params.set("query", query.search);
-  //       } else if (query.searchLocation) {
-  //         params.set("location", query.searchLocation);
-  //       } else {
-  //         params.delete("query");
-  //         params.delete("location");
-  //       }
-  //       router.push(`?${params.toString()}`);
-  //     },
-  //     50
-  //   );
-  //   const checkIfJobInArray = (object: ISearch, array: ISearch[]): boolean => {
-  //     return array.some((item) => item === object);
-  //   };
-
-  //   const saveSearches = (object: ISearch) => {
-  //     let currentList: ISearch[] = [];
-  //     const storedList = localStorage.getItem("searches");
-  //     if (storedList) {
-  //       currentList = JSON.parse(storedList);
-  //     }
-  //     const obj = checkIfJobInArray(object, currentList);
-  //     if (obj) {
-  //       return;
-  //     } else {
-  //       currentList.push(object);
-  //       if (typeof window !== "undefined") {
-  //         localStorage.setItem("searches", JSON.stringify(currentList));
-  //         localStorage.setItem("notification", String(true));
-  //       }
-  //       dispatch(setNotification());
-  //     }
-  //   };
-
-  //   const [myState, setState] = useState<ISearchType>({
-  //     resultsPerPage: 0,
-  //     page: 0,
-  //     searchQuery: "",
-  //     location: "",
-  //     searchLocation: "",
-  //   });
-  //   useGetJobSearchQuery(myState, {
-  //     skip:
-  //       !myState.page ||
-  //       !myState.resultsPerPage ||
-  //       (!myState.searchQuery && !myState.location) ||
-  //       (!myState.searchLocation && !myState.location),
-  //   });
-
-  //   const onSubmit = async (values: Record<string, any>, { resetForm }: any) => {
-  //     setSearchController(true);
-  //     if (values.location && values.search === "") {
-  //       setState({
-  //         page: page > 0 ? page : 1,
-  //         resultsPerPage: resultsPerPage > 0 ? resultsPerPage : 4,
-  //         location: country,
-  //         searchLocation: values.location,
-  //       });
-  //     } else if (values.search && values.location === "") {
-  //       setState({
-  //         page: page > 0 ? page : 1,
-  //         resultsPerPage: resultsPerPage > 0 ? resultsPerPage : 4,
-  //         location: country,
-  //         searchQuery: values.search,
-  //       });
-  //     } else {
-  //       setState({
-  //         page: page > 0 ? page : 1,
-  //         resultsPerPage: resultsPerPage > 0 ? resultsPerPage : 4,
-  //         location: country,
-  //         searchQuery: values.search,
-  //         searchLocation: values.location,
-  //       });
-  //     }
-  //     updateURLFromSearchQuery({
-  //       search: values?.search ?? "",
-  //       searchLocation: values.location,
-  //       page: page <= 0 ? 1 : page,
-  //       resultsPerPage: resultsPerPage <= 0 ? 4 : resultsPerPage,
-  //     });
-  //     dispatch(setNotification());
-  //     saveSearches(values.search || values.location);
-  //     resetForm({});
-  //   };
-
-  //   useEffect(() => {
-  //     const params = new URLSearchParams(searchParams);
-  //     params.delete("query");
-  //     params.delete("location");
-  //     router.push(`?${params.toString()}`);
-  //   }, []);
-
-  //   useEffect(() => {
-  //     if (!searchController) {
-  //       dispatch(stopSearch());
-  //     } else {
-  //       dispatch(startSearch());
-  //     }
-  //   }, [searchController]);
+  const { setParam, clearParams, getParam } = useUrlSearchParams();
+  const [values, setValues] = useState({
+    searchQuery: getParam(SEARCHPARAMS_QUERIES.search),
+    job_mode: getParam(SEARCHPARAMS_QUERIES.job_mode),
+  });
 
   const debouncedSearch = useDebouncedCallback((value: string) => {
-    performSearch(value);
+    onSearch(value);
     return;
   }, 300);
 
-  const performSearch = async (query: string) => {
+  const onSearch = async (query: string) => {
+    setParam(SEARCHPARAMS_QUERIES.search, query);
     setValues((prev) => ({ ...prev, searchQuery: query }));
     setParams((prev) => ({ ...prev, searchQuery: query }));
   };
@@ -172,15 +42,11 @@ export const JobSearch = ({
     debouncedSearch(value);
   };
 
-  useEffect(() => {
-    if (!Object.values(values).length)
-      setParams({
-        page: 1,
-        limit: 4,
-        searchQuery: undefined,
-        job_mode: undefined,
-      });
-  }, [setParams, params]);
+  const onSelectChange = (value: string) => {
+    setParam(SEARCHPARAMS_QUERIES.job_mode, value);
+    setValues((prev) => ({ ...prev, job_mode: value }));
+    setParams((prev) => ({ ...prev, job_mode: value }));
+  };
 
   const clearFilters = () => {
     setValues({ job_mode: "", searchQuery: "" });
@@ -190,6 +56,7 @@ export const JobSearch = ({
       searchQuery: undefined,
       job_mode: undefined,
     });
+    clearParams();
   };
 
   return (
@@ -197,21 +64,17 @@ export const JobSearch = ({
       <div className="flex flex-col md:flex-row items-center gap-5">
         <div className="grid md:gap-3 lg:gap-0 w-full md:grid-cols-[60%_40%] items-center bg-white rounded-sm flex-1">
           <Input
-            value={values.searchQuery}
-            onChangeCapture={handleInputChange}
+            value={values.searchQuery ?? ""}
             type="search"
             className="autocomplete-input h-[52px] w-full px-8 rounded-lg !border-none font-[400] placeholder:!text-sm placeholder:!text-gray-500 outline-none"
-            onChange={() => {}}
+            onChange={handleInputChange}
             autoComplete="off"
             placeholder="Search by job title, company"
           />
           <div className="relative">
             <Select
-              value={values.job_mode}
-              onValueChange={(value: string) => {
-                setValues((prev) => ({ ...prev, job_mode: value }));
-                setParams((prev) => ({ ...prev, job_mode: value }));
-              }}
+              value={values.job_mode ?? ""}
+              onValueChange={(value: string) => onSelectChange(value)}
             >
               <SelectTrigger className="w-full pl-8 text-sm !h-[50px] font-[400]">
                 <SelectValue placeholder="Select job mode" />
