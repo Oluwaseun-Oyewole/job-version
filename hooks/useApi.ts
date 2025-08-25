@@ -32,6 +32,7 @@ export function useApiQuery<T>(
       const response = await api.get<ApiResponse<T>>(url, { params });
       return response?.data && response?.data?.data;
     },
+
     // refetchOnWindowFocus: false,
     ...options,
   });

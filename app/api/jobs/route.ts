@@ -13,6 +13,9 @@ export const GET = async (req: NextRequest) => {
   const location = searchParams.get("location");
   const experience_level = searchParams.get("experience_level") as EXPERIENCE;
   const searchQuery = searchParams.get("searchQuery")?.toString();
+  const min_salary = Number(searchParams.get("min_salary"));
+  const max_salary = Number(searchParams.get("max_salary"));
+  const sort_by = searchParams.get("sort_by");
 
   await corsMiddleware();
 
@@ -56,11 +59,41 @@ export const GET = async (req: NextRequest) => {
       ];
     }
 
+    if (min_salary && max_salary) {
+      where.salary = {
+        gte: min_salary,
+        lte: max_salary,
+      };
+    } else if (min_salary) {
+      where.salary = {
+        gte: min_salary,
+      };
+    } else if (max_salary) {
+      where.salary = {
+        lte: max_salary,
+      };
+    }
+
+    let orderBy: any = {};
+    switch (sort_by) {
+      case "most-recent":
+        orderBy = { created_at: "desc" };
+        break;
+      case "a-z":
+        orderBy = { job_title: "asc" };
+        break;
+      case "top-salary":
+        orderBy = { salary: "desc" };
+        break;
+      default:
+        orderBy = { created_at: "desc" };
+    }
+
     const jobs = await prisma.jobs.findMany({
       where,
       skip: (page - 1) * limit,
       take: limit,
-      orderBy: { created_at: "desc" },
+      orderBy,
     });
     const total = await prisma.jobs.count();
     const totalPages = Math.ceil(total / limit) ?? 1;

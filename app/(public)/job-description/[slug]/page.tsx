@@ -2,7 +2,6 @@ import GoBack from "@/components/Back";
 import prisma from "@/lib/prisma";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import Saved from "../../../../assets/fav.svg";
 
 //TODO remove any
 interface PageProps {
@@ -45,7 +44,7 @@ const JobDetails = async ({ params }: PageProps) => {
 
   return (
     <div className=" bg-white max-w-3xl mx-auto my-5 p-10 rounded-md">
-      <GoBack />{" "}
+      <GoBack />
       <div className="flex justify-between">
         <div className="flex gap-4 sticky top-0 left-0">
           <h1 className="font-extrabold text-2xl">{job?.job_title}</h1>
@@ -58,23 +57,6 @@ const JobDetails = async ({ params }: PageProps) => {
               width={50}
             />
           )}
-        </div>
-        <div className="flex justify-between">
-          <div className="flex gap-2 items-center">
-            <Image
-              src={Saved}
-              alt="netflix"
-              className="cursor-pointer"
-              // onClick={() =>
-              //   savedJobToLocalStorage({
-              //     id: data?.data?.id,
-              //     jobTitle: data?.data?.jobTitle,
-              //     companyName: data?.data?.companyName,
-              //     location: data?.data?.location,
-              //   })
-              // }
-            />
-          </div>
         </div>
       </div>
       <div className="font-[400] flex flex-col ">

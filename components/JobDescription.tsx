@@ -1,13 +1,26 @@
+import Saved from "@/assets/fav.svg";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useJobberStore } from "@/store";
-import { truncate } from "@/utils/helper";
+import { Toastify, truncate } from "@/utils/helper";
 import Image from "next/image";
 import Link from "next/link";
 
 const JobDetails = () => {
   const { data, isLoading } = useJobberStore();
   const firstJob = data[0];
+  const { addLikedJob, removeLikedJob, isJobLiked } = useLocalStorage();
+
+  const handleLikeToggle = () => {
+    if (isJobLiked(firstJob?.id)) {
+      removeLikedJob(firstJob?.id);
+      Toastify.error("Remove from saved lists");
+    } else {
+      addLikedJob({ ...firstJob });
+      Toastify.success("Job saved");
+    }
+  };
 
   return (
     <div className="hidden md:block bg-white rounded-lg h-[84vh] overflow-scroll shadow-md p-5 font-[400]">
@@ -61,11 +74,25 @@ const JobDetails = () => {
                   <p>{firstJob?.location}</p>
                 </div>
 
-                {firstJob?.no_of_hires && (
-                  <p className="bg-[rgba(83,116,231,0.1)] text-[#5374E7] rounded-md py-3 w-[40%] flex items-center justify-center font-[300] text-sm">
-                    {firstJob?.no_of_hires} to be hired
-                  </p>
-                )}
+                <div className="flex items-center justify-between">
+                  {firstJob?.no_of_hires && (
+                    <p className="bg-[rgba(83,116,231,0.1)] text-[#5374E7] rounded-md py-3 w-[40%] flex items-center justify-center font-[300] text-sm">
+                      {firstJob?.no_of_hires} to be hired
+                    </p>
+                  )}
+                  <div className="flex gap-2 items-center">
+                    <Button
+                      onClick={handleLikeToggle}
+                      className="!bg-transparent"
+                    >
+                      <Image
+                        src={Saved}
+                        alt="netflix"
+                        className="cursor-pointer"
+                      />
+                    </Button>
+                  </div>
+                </div>
               </div>
               <div className="py-6 border__bottom font-[300] flex flex-col gap-5 w-[90%]">
                 <div className="flex justify-between items-center text-sm">
@@ -104,7 +131,7 @@ const JobDetails = () => {
                   &#36;{firstJob.salary}K/month
                 </p>
 
-                <Link href={`/job-description/${firstJob?.id}`}>
+                <Link href={`/job-description/${firstJob?.slug}`}>
                   <Button className="bg-lightBlue hover:bg-deepBlue w-full mt-4 h-[50px] transition-all ease-in-out duration-500">
                     Read More
                   </Button>

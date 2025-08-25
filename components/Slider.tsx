@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
+import { ValuesInterface } from "@/types";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import { Dispatch, SetStateAction } from "react";
@@ -28,22 +29,22 @@ const SliderTooltip: React.FC<SliderTooltipProps> = ({
 };
 
 const SliderComponent = ({
-  sliderRange,
-  setSliderRange,
+  values,
+  setValues,
 }: {
-  sliderRange: number[];
-  setSliderRange: Dispatch<SetStateAction<number[]>>;
+  values: ValuesInterface;
+  setValues: Dispatch<SetStateAction<ValuesInterface>>;
 }) => {
-  // const [sliderRange, setSliderRange] = useState([10, 1000000]);
   return (
-    <div>
+    <>
       <Slider
-        defaultValue={[500, 10000]}
+        value={[values?.min_salary, values?.max_salary]}
         min={500}
-        max={10000}
-        // value={[100, 100000]}s
+        max={1000000}
         range
-        onChange={(e: any) => setSliderRange(e)}
+        onChange={(e: any) =>
+          setValues((prev) => ({ ...prev, min_salary: e[0], max_salary: e[1] }))
+        }
         handleRender={(renderProps) => {
           return (
             <div {...renderProps.props}>
@@ -58,10 +59,10 @@ const SliderComponent = ({
         }}
       />
       <div className="flex items-center justify-between mt-6 text-deepBlue font-medium text-[14px]">
-        <p>&#36;{sliderRange && sliderRange[0]}</p>
-        <p>&#36;{sliderRange && sliderRange[1]}</p>
+        <p>&#36;{values?.min_salary && values?.min_salary}</p>
+        <p>&#36;{values?.max_salary && values?.max_salary}</p>
       </div>
-    </div>
+    </>
   );
 };
 

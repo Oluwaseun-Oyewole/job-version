@@ -23,7 +23,7 @@ export const sortBy = [
   { id: 1, value: "most-recent", label: "Most Recent" },
   { id: 2, value: "a-z", label: "A-Z" },
   { id: 3, value: "top-salary", label: "Top Salary" },
-  { id: 4, value: "trending", label: "Trending" },
+  // { id: 4, value: "trending", label: "Trending" },
 ];
 
 export const COOKIES_KEYS = {
@@ -35,4 +35,7 @@ export const SEARCHPARAMS_QUERIES = {
   job_mode: "job_mode",
   page: "page",
   limit: "limit",
+  sort_by: "sort_by",
+  min_salary: "min_salary",
+  max_salary: "max_salary",
 };
