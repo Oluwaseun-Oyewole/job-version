@@ -33,7 +33,6 @@ export enum Job_type {
   PartTime,
 }
 
-// types/jobs.ts
 export interface Jobs {
   id: string;
   title: string;
@@ -41,7 +40,6 @@ export interface Jobs {
   location: string;
   job_mode: string;
   description: string;
-  // Add other job properties as needed
 }
 
 export interface JobParams {
@@ -52,6 +50,8 @@ export interface JobParams {
   sort_by?: string;
   min_salary?: number;
   max_salary?: number;
+  // job_type: string[];
+  // experience_level: string[];
 }
 
 export interface JobsData {

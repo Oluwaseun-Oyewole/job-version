@@ -1,21 +1,21 @@
-import Saved from "@/assets/fav.svg";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useJobberStore } from "@/store";
+import { useLikedJobsStore } from "@/store/likedJobsStore";
 import { Toastify, truncate } from "@/utils/helper";
+import { Pin, PinOff } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 const JobDetails = () => {
   const { data, isLoading } = useJobberStore();
   const firstJob = data[0];
-  const { addLikedJob, removeLikedJob, isJobLiked } = useLocalStorage();
+  const { isJobLiked, removeLikedJob, addLikedJob } = useLikedJobsStore();
 
   const handleLikeToggle = () => {
     if (isJobLiked(firstJob?.id)) {
       removeLikedJob(firstJob?.id);
-      Toastify.error("Remove from saved lists");
+      Toastify.success("Job removed from saved list");
     } else {
       addLikedJob({ ...firstJob });
       Toastify.success("Job saved");
@@ -80,18 +80,22 @@ const JobDetails = () => {
                       {firstJob?.no_of_hires} to be hired
                     </p>
                   )}
-                  <div className="flex gap-2 items-center">
+
+                  {isJobLiked(firstJob?.id) ? (
                     <Button
                       onClick={handleLikeToggle}
-                      className="!bg-transparent"
+                      className="!bg-transparent text-black"
                     >
-                      <Image
-                        src={Saved}
-                        alt="netflix"
-                        className="cursor-pointer"
-                      />
+                      <PinOff size={18} />
                     </Button>
-                  </div>
+                  ) : (
+                    <Button
+                      onClick={handleLikeToggle}
+                      className="!bg-transparent text-black"
+                    >
+                      <Pin size={18} />
+                    </Button>
+                  )}
                 </div>
               </div>
               <div className="py-6 border__bottom font-[300] flex flex-col gap-5 w-[90%]">

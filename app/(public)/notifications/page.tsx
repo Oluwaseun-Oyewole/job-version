@@ -1,59 +1,38 @@
 "use client";
+import LoadingSpinner from "@/components/Loading";
+import SavedJobs from "@/components/SavedJobs";
 import { Button } from "@/components/ui/button";
+import { useLikedJobsStore } from "@/store/likedJobsStore";
 import { routes } from "@/utils/routes";
+import { Tabs, TabsContent } from "@radix-ui/react-tabs";
 import { Bell } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const Notification = () => {
-  // const dispatch = useAppDispatch();
-  // const { savedJobs, savedSearch } = useAppSelector(
-  //   (state) => state.rootReducer.jobs,
-  // );
-
-  // useEffect(() => {
-  //   if (typeof window !== "undefined") {
-  //     const search = localStorage.getItem("searches")!;
-  //     const storage = localStorage.getItem("savedJobs");
-  //     dispatch(allSavedJobs(JSON.parse(storage!)));
-  //     dispatch(allSavedSearches(search!));
-  //   }
-  // }, [dispatch]);
-
-  // if (
-  //   (savedJobs && savedJobs?.length > 0) ||
-  //   (savedSearch && savedSearch.length > 0)
-  // ) {
-  //   return (
-  //     <div className="">
-  //       <Tabs
-  //         defaultValue="saved-jobs"
-  //         className="flex justify-between items-center flex-col"
-  //       >
-  //         <TabsList className="flex w-[70%] md:w-[50%] lg:w-[30%] justify-between !bg-gray-200 !text-deepBlue !font-light mt-20 !py-7 !px-3">
-  //           <TabsTrigger value="saved-jobs" className="!font-light">
-  //             Saved Jobs
-  //           </TabsTrigger>
-  //           <TabsTrigger value="recent-searches" className="!font-light">
-  //             Recent Searches
-  //           </TabsTrigger>
-  //         </TabsList>
-  //         <TabsContent
-  //           value="saved-jobs"
-  //           className="w-full flex flex-col items-center justify-center"
-  //         >
-  //           <SavedJobs />
-  //         </TabsContent>
-  //         <TabsContent
-  //           value="recent-searches"
-  //           className="w-full flex flex-col items-center justify-center"
-  //         >
-  //           <RecentSearches />
-  //         </TabsContent>
-  //       </Tabs>
-  //     </div>
-  //   );
-  // }
+  const { isLoading, likedJobs } = useLikedJobsStore();
   const { push } = useRouter();
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (likedJobs?.length > 0) {
+    return (
+      <div className="">
+        <Tabs
+          defaultValue="saved-jobs"
+          className="flex justify-between items-center flex-col"
+        >
+          <TabsContent
+            value="saved-jobs"
+            className="w-full flex flex-col items-center justify-center"
+          >
+            <SavedJobs />
+          </TabsContent>
+        </Tabs>
+      </div>
+    );
+  }
 
   return (
     <div className="h-[85vh] flex items-center justify-center">

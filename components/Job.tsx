@@ -1,10 +1,12 @@
 import { JobType } from "@/services/types";
-import { dateFormat, formatCurrency, truncate } from "@/utils/helper";
-import { MapPin } from "lucide-react";
+import { useLikedJobsStore } from "@/store/likedJobsStore";
+import { dateFormat, formatCurrency, Toastify, truncate } from "@/utils/helper";
+import { routes } from "@/utils/routes";
+import { MapPin, Pin, PinOff } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import Dollar from "../assets/dollar.svg";
 import { JobCardSkeleton } from "./skeletons/JobCardSkeleton";
+import { Button } from "./ui/button";
 
 export interface SavedJobInterface {
   id: string;
@@ -13,46 +15,22 @@ export interface SavedJobInterface {
   location: string;
 }
 
-const Job = ({
-  data,
-  isLoading,
-  refetch,
-}: {
-  data?: JobType[];
-  isLoading: boolean;
-  refetch?: () => void;
-}) => {
+const Job = ({ data, isLoading }: { data?: JobType[]; isLoading: boolean }) => {
+  const { isJobLiked, removeLikedJob, addLikedJob } = useLikedJobsStore();
+
+  const handleLikeToggle = (job: JobType) => {
+    if (isJobLiked(job?.id)) {
+      removeLikedJob(job?.id);
+      Toastify.success("Job removed from saved list");
+    } else {
+      addLikedJob({ ...job });
+      Toastify.success("Job saved");
+    }
+  };
+
   if (isLoading) {
     return <JobCardSkeleton />;
   }
-
-  const checkIfJobInArray = (
-    object: SavedJobInterface,
-    array: SavedJobInterface[]
-  ): boolean => {
-    return array.some((item) => item.jobTitle === object.jobTitle);
-  };
-
-  //   const savedJobToLocalStorage = (object: SavedJobInterface) => {
-  //     let currentList: SavedJobInterface[] = [];
-  //     const storedList = localStorage.getItem("savedJobs");
-  //     if (storedList) {
-  //       currentList = JSON.parse(storedList);
-  //     }
-  //     const obj = checkIfJobInArray(object, currentList);
-  //     if (obj || object.jobTitle === "") {
-  //       Toastify.error("Job already saved");
-  //       return;
-  //     } else {
-  //       currentList.push(object);
-  //       if (typeof window !== "undefined") {
-  //         localStorage.setItem("savedJobs", JSON.stringify(currentList));
-  //         localStorage.setItem("notification", String(true));
-  //       }
-  //       dispatch(setNotification());
-  //       Toastify.success("Job saved");
-  //     }
-  //   };
 
   if (data && data?.length <= 0) {
     return (
@@ -66,67 +44,75 @@ const Job = ({
 
   return (
     <div className="grid grid-flow-row gap-4 pb-7">
-      <div className="grid grid-cols-[100%] gap-4 lg:gap-3 lg:grid-cols-2">
+      <div className="grid grid-cols-[100%] gap-4 lg:gap-3 lg:grid-cols-2 relative">
         {data?.map((job) => {
           return (
             <div key={job?.id}>
-              <Link href={`/job-description/${job?.slug}`} className="">
-                <div className="flex justify-between flex-col">
-                  <div className="mb-5 min-h-[230px] bg-white rounded-lg shadow-md hover:shadow-lg cursor-pointer xl:flex flex-col gap-4 px-5 py-5 font-[400] justify-between">
-                    <div className="flex flex-col gap-5">
-                      <div className="flex justify-between items-center">
-                        <div className="flex items-center gap-4">
-                          {job?.company_logo && (
-                            <Image
-                              src={job?.company_logo}
-                              alt="job image"
-                              width={50}
-                              height={50}
-                            />
-                          )}
+              <div className="flex justify-between flex-col">
+                <div className="mb-5 min-h-[230px] bg-white rounded-lg shadow-md hover:shadow-lg xl:flex flex-col gap-4 px-5 py-5 font-[400] justify-between">
+                  <div className="flex flex-col gap-3">
+                    <div className="flex items-center gap-1">
+                      {job?.company_logo && (
+                        <Image
+                          src={job?.company_logo}
+                          alt="job image"
+                          width={50}
+                          height={50}
+                        />
+                      )}
 
-                          <h1 className="text-base">{job?.job_title}</h1>
-                        </div>
-                        <div className="flex gap-1 relative">
-                          <p className="font-[300] text-sm">
-                            {job?.company_name}
-                          </p>
-                          <div className="absolute -top-5 -right-3">
-                            {dateFormat(job?.created_at) !== "2 days ago" && (
-                              <small className="text-red-500 text-[10px] rounded-lg border-[0.5px] border-red-500 px-1">
-                                New
-                              </small>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2 justify-between text-sm">
-                        <div className="flex items-center gap-1">
-                          <MapPin size={12} />
-                          <p className="">{job?.location}</p>
-                        </div>
-                        <div className="flex items-center">
-                          <h3 className=" bg-lightGray rounded-sm">
-                            {job?.job_type}
-                          </h3>
-                        </div>
-                      </div>
-                      <p className="text-sm">
-                        {truncate(job?.job_description, 80)}
-                      </p>
+                      <h1 className="text-sm">{job?.job_title}</h1>
+                      {`(${job?.company_name} ${
+                        dateFormat(job?.created_at) !== "2 days ago" ? (
+                          <small className="text-red-500 text-[10px] rounded-lg border-[0.5px] border-red-500 px-1">
+                            New
+                          </small>
+                        ) : (
+                          ""
+                        )
+                      })`}
                     </div>
-                    <div className="flex justify-between items-center text-sm">
-                      <div className="flex gap-2 items-center">
-                        <Image src={Dollar} alt="dollars" />
-                        <p className="text-xs ">
-                          {formatCurrency(job?.salary ?? 0)}/month
-                        </p>
+
+                    <div className="flex items-center justify-between text-sm">
+                      <div className="flex items-center gap-1">
+                        <MapPin size={12} />
+                        <p className="">{job?.location}</p>
                       </div>
-                      <p className="text-xs ">{dateFormat(job?.created_at)}</p>
+                      {isJobLiked(job?.id) ? (
+                        <Button
+                          onClick={() => handleLikeToggle(job)}
+                          className="!bg-transparent text-black"
+                        >
+                          <PinOff size={18} />
+                        </Button>
+                      ) : (
+                        <Button
+                          onClick={() => handleLikeToggle(job)}
+                          className="!bg-transparent text-black"
+                        >
+                          <Pin size={18} />
+                        </Button>
+                      )}
+                    </div>
+                    <p className="text-sm">
+                      {truncate(job?.job_description, 80)}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-sm ">
+                      {formatCurrency(job?.salary ?? 0)}/month
+                    </p>
+                    <div className="flex justify-between items-center text-sm mt-2">
+                      <p className="">{dateFormat(job?.created_at)}</p>
+
+                      <Link href={routes.description(job?.slug)}>
+                        <p className="text-deepBlue">Job details</p>
+                      </Link>
                     </div>
                   </div>
                 </div>
-              </Link>
+              </div>
             </div>
           );
         })}

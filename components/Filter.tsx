@@ -19,7 +19,7 @@ import {
 } from "@/utils/constants";
 import classNames from "classnames";
 import "rc-slider/assets/index.css";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import SliderComponent from "./Slider";
 
 const CheckBoxInput = ({
@@ -35,8 +35,7 @@ const CheckBoxInput = ({
   value: string;
   checked: boolean;
   job: any;
-  // onChange: (job: Job, e: ChangeEvent<HTMLInputElement>) => void;
-  onChange: (job: any, e: ChangeEvent<HTMLInputElement>) => void;
+  onChange: (value: string, checked: boolean) => void;
 }) => {
   return (
     <input
@@ -45,7 +44,7 @@ const CheckBoxInput = ({
       id={id}
       value={value}
       checked={checked}
-      onChange={(e) => onChange(job, e)}
+      onChange={(e) => onChange(value, e.target.checked)}
       className="h-[15px] w-[17px] focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
     />
   );
@@ -207,15 +206,14 @@ export const Filter = ({ isLoading, data, params, setParams }: JobsProps) => {
                       "space-x-0 gap-0"
                     )}
                   >
-                    <input
+                    <CheckBoxInput
+                      name="experience"
                       id={job.value}
-                      type="checkbox"
                       value={job.value}
-                      //   checked={isSelected(job.value)}
-                      //   onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                      //     handleJobTypeChange(e)
-                      //   }
-                      className="h-[15px] w-[17px] focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
+                      checked
+                      job={job}
+                      onChange={() => {}}
+                      //   onChange={handleJobExperienceChange}
                     />
                     <Label htmlFor={job.value}>{job.label}</Label>
                   </div>
@@ -225,6 +223,7 @@ export const Filter = ({ isLoading, data, params, setParams }: JobsProps) => {
           </div>
         </div>
       </div>
+
       <div className="pt-6">
         <h2 className="pb-4 font-bold">Experience</h2>
         <div className="w-[92%]">
@@ -241,11 +240,19 @@ export const Filter = ({ isLoading, data, params, setParams }: JobsProps) => {
                       "space-x-0 gap-1"
                     )}
                   >
+                    {/* <Checkbox
+                      value={job.value}
+                      // checked={job.checked}
+                      className="!border-2 !border-red-500 !h-5 !w-5"
+                      onCheckedChange={() => {
+                        console.log("on chnange -- ");
+                      }}
+                    /> */}
                     <CheckBoxInput
                       name="experience"
                       id={job.value}
                       value={job.value}
-                      checked={job.checked}
+                      checked
                       job={job}
                       onChange={() => {}}
                       //   onChange={handleJobExperienceChange}

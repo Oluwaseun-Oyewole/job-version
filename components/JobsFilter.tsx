@@ -13,37 +13,7 @@ import {
 import { JobsProps } from "@/types";
 import { ListFilter } from "lucide-react";
 import "rc-slider/assets/index.css";
-import { ChangeEvent } from "react";
 import { Filter } from "./Filter";
-
-const CheckBoxInput = ({
-  name,
-  id,
-  value,
-  checked,
-  job,
-  onChange,
-}: {
-  name: string;
-  id: string;
-  value: string;
-  checked: boolean;
-  job: any;
-  // onChange: (job: Job, e: ChangeEvent<HTMLInputElement>) => void;
-  onChange: (job: any, e: ChangeEvent<HTMLInputElement>) => void;
-}) => {
-  return (
-    <input
-      type="checkbox"
-      name={name}
-      id={id}
-      value={value}
-      checked={checked}
-      onChange={(e) => onChange(job, e)}
-      className="h-[15px] w-[17px] focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
-    />
-  );
-};
 
 export const JobsFilter = ({ isLoading, params, setParams }: JobsProps) => {
   return (

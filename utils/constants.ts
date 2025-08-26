@@ -1,22 +1,22 @@
 export const jobType = [
-  { id: 1, label: "FullTime", value: "fulltime", checked: false },
-  { id: 2, label: "PartTime", value: "parttime", checked: false },
-  { id: 3, label: "Internship", value: "internship", checked: false },
-  { id: 4, label: "Volunteer", value: "volunteer", checked: false },
-  { id: 5, label: "Contract", value: "contract", checked: false },
+  { id: 1, label: "FullTime", value: "fulltime" },
+  { id: 2, label: "PartTime", value: "parttime" },
+  { id: 3, label: "Internship", value: "internship" },
+  { id: 4, label: "Volunteer", value: "volunteer" },
+  { id: 5, label: "Contract", value: "contract" },
 ];
 
 export const experience = [
-  { id: 2, label: "Junior", value: "Junior", checked: false },
-  { id: 3, label: "Intermediate", value: "Intermediate", checked: false },
-  { id: 4, label: "Senior", value: "Senior", checked: false },
-  { id: 5, label: "Tech Lead", value: "Tech Lead", checked: false },
+  { id: 2, label: "Junior", value: "Junior" },
+  { id: 3, label: "Intermediate", value: "Intermediate" },
+  { id: 4, label: "Senior", value: "Senior" },
+  { id: 5, label: "Tech Lead", value: "Tech Lead" },
 ];
 
 export const position = [
-  { id: 1, label: "Onsite", value: "Onsite", checked: false },
-  { id: 2, label: "Hybrid", value: "Hybrid", checked: false },
-  { id: 3, label: "Remote", value: "Remote", checked: false },
+  { id: 1, label: "Onsite", value: "Onsite" },
+  { id: 2, label: "Hybrid", value: "Hybrid" },
+  { id: 3, label: "Remote", value: "Remote" },
 ];
 
 export const sortBy = [
@@ -38,4 +38,6 @@ export const SEARCHPARAMS_QUERIES = {
   sort_by: "sort_by",
   min_salary: "min_salary",
   max_salary: "max_salary",
+  job_type: "job_type",
+  experience: "experience_level",
 };

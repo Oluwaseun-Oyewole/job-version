@@ -1,3 +1,4 @@
+import { Navigation } from "@/components/Navigation";
 import type { Metadata } from "next";
 import { Toaster } from "react-hot-toast";
 import { sans } from "./fonts";
@@ -18,7 +19,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${sans.className} bg-gray-100`}>
         <Toaster position="top-center" />
-        <Provider>{children}</Provider>
+        <Provider>
+          <Navigation />
+          {children}
+        </Provider>
       </body>
     </html>
   );

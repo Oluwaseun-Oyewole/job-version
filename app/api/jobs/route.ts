@@ -26,6 +26,7 @@ export const GET = async (req: NextRequest) => {
     if (job_mode && Object.values(JOB_MODE)?.includes(job_mode))
       where.job_mode = job_mode;
     if (job_type) where.job_type = job_type;
+    console.log("job_type is -", job_type);
     if (experience_level) where.experience_level = experience_level;
 
     if (location) {

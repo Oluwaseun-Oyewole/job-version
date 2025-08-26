@@ -60,7 +60,7 @@ const Jobs = ({
         </div>
 
         <div className="overflow-y-scroll">
-          <Job data={data?.jobs} isLoading={isLoading} refetch={refetch} />
+          <Job data={data?.jobs} isLoading={isLoading} />
         </div>
       </div>
     </div>
