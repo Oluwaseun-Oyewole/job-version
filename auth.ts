@@ -1,7 +1,7 @@
+import prisma from "@/lib/prisma";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import NextAuth from "next-auth";
 import authConfig from "./auth.config";
-import prisma from "./lib/prisma";
 import { generateCustomToken, verifyCustomToken } from "./utils/helper";
 
 const secret = new TextEncoder().encode(process.env.NEXTAUTH_SECRET!);
@@ -13,6 +13,8 @@ export const {
   signOut,
 } = NextAuth({
   ...authConfig,
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  //@ts-ignore
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
   secret: process.env.AUTH_SECRET,
