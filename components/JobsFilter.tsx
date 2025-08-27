@@ -10,7 +10,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { JobsProps } from "@/types";
+import { JobsProps } from "@/utils/types";
 import { ListFilter } from "lucide-react";
 import "rc-slider/assets/index.css";
 import { Filter } from "./Filter";

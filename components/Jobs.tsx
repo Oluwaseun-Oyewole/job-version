@@ -1,29 +1,13 @@
 "use client";
 import { useJobberStore } from "@/store";
-import { JobsProps } from "@/types";
+import { JobsProps } from "@/utils/types";
 import { useEffect } from "react";
 import Job from "./Job";
 import PaginationWrapper from "./Pagination";
 import { JobSearch } from "./Search";
 
-const Jobs = ({
-  isLoading,
-  isSuccess,
-  data,
-  params,
-  setParams,
-  refetch,
-}: JobsProps) => {
+const Jobs = ({ isLoading, isSuccess, data, params, setParams }: JobsProps) => {
   const { updateData, setIsLoading } = useJobberStore();
-
-  // useEffect(() => {
-  //   if (isNaN(page)) removeParam(SEARCHPARAMS_QUERIES.page);
-  //   if (limit === 0 || isNaN(limit)) removeParam(SEARCHPARAMS_QUERIES.limit);
-  //   if (job_mode === "null" || !job_mode)
-  //     removeParam(SEARCHPARAMS_QUERIES.job_mode);
-  //   if (searchQuery === null) removeParam(SEARCHPARAMS_QUERIES.search);
-  // }, []);
-
   useEffect(() => {
     if (isSuccess) {
       updateData(data?.jobs ?? []);
@@ -32,10 +16,10 @@ const Jobs = ({
   }, [isSuccess, isLoading, data?.jobs]);
 
   const onNext = () => {
-    return setParams((prev) => ({ ...prev, page: params?.page + 1 }));
+    return setParams((prev) => ({ ...prev, page: Number(params?.page) + 1 }));
   };
   const onPrev = () => {
-    return setParams((prev) => ({ ...prev, page: params?.page - 1 }));
+    return setParams((prev) => ({ ...prev, page: Number(params?.page) - 1 }));
   };
 
   return (

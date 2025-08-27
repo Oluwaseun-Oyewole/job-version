@@ -1,4 +1,4 @@
-import { useApiQuery } from "@/hooks/useApi";
+import { useApiQuery } from "@/utils/hooks/useApi";
 import { Endpoints } from "./endpoints";
 import { JobParams, JobResponse } from "./types";
 

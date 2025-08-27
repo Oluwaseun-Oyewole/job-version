@@ -10,7 +10,8 @@ export const experience = [
   { id: 2, label: "Junior", value: "Junior" },
   { id: 3, label: "Intermediate", value: "Intermediate" },
   { id: 4, label: "Senior", value: "Senior" },
-  { id: 5, label: "Tech Lead", value: "Tech Lead" },
+  { id: 5, label: "Lead", value: "Lead" },
+  { id: 6, label: "Principal", value: "Principal" },
 ];
 
 export const position = [
@@ -39,5 +40,5 @@ export const SEARCHPARAMS_QUERIES = {
   min_salary: "min_salary",
   max_salary: "max_salary",
   job_type: "job_type",
-  experience: "experience_level",
+  experience_level: "experience_level",
 };

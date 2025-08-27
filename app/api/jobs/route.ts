@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { EXPERIENCE, JOB_MODE } from "@/app/generated/prisma";
+import { JOB_MODE, JOB_TYPE } from "@/app/generated/prisma";
+import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
-import corsMiddleware from "@/middleware";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (req: NextRequest) => {
@@ -9,15 +9,15 @@ export const GET = async (req: NextRequest) => {
   let limit = Number(searchParams.get("limit"));
   let page = Number(searchParams.get("page"));
   const job_mode = searchParams.get("job_mode") as JOB_MODE;
-  const job_type = searchParams.get("job_type");
+  const job_type = searchParams.get("job_type[]");
   const location = searchParams.get("location");
-  const experience_level = searchParams.get("experience_level") as EXPERIENCE;
+  const experience_level = searchParams.get("experience_level");
   const searchQuery = searchParams.get("searchQuery")?.toString();
   const min_salary = Number(searchParams.get("min_salary"));
   const max_salary = Number(searchParams.get("max_salary"));
   const sort_by = searchParams.get("sort_by");
 
-  await corsMiddleware();
+  await auth();
 
   if (!limit || limit === 0) limit += 4;
   if (page <= 0) page += 1;
@@ -25,9 +25,20 @@ export const GET = async (req: NextRequest) => {
     const where: any = {};
     if (job_mode && Object.values(JOB_MODE)?.includes(job_mode))
       where.job_mode = job_mode;
-    if (job_type) where.job_type = job_type;
-    console.log("job_type is -", job_type);
-    if (experience_level) where.experience_level = experience_level;
+
+    if (experience_level) {
+      where.experience_level = experience_level;
+    }
+
+    // Job type filter (multiple selection)
+    if (job_type) {
+      const jobTypes = job_type.split(",");
+      where.job_type = {
+        in: jobTypes.filter((type) =>
+          Object.values(JOB_TYPE).includes(type as JOB_TYPE)
+        ),
+      };
+    }
 
     if (location) {
       where.location = {
@@ -119,6 +130,7 @@ export const GET = async (req: NextRequest) => {
       { status: 200 }
     );
   } catch (error) {
+    console.log("error - ", error);
     return NextResponse.json(
       { message: "Oops something went wrong" },
       { status: 501 }

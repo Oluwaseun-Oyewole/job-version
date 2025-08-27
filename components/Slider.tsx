@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import { ValuesInterface } from "@/types";
+import { JobParams } from "@/utils/types";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import { Dispatch, SetStateAction } from "react";
@@ -32,13 +32,13 @@ const SliderComponent = ({
   values,
   setValues,
 }: {
-  values: ValuesInterface;
-  setValues: Dispatch<SetStateAction<ValuesInterface>>;
+  values: JobParams;
+  setValues: Dispatch<SetStateAction<JobParams>>;
 }) => {
   return (
     <>
       <Slider
-        value={[values?.min_salary, values?.max_salary]}
+        value={[Number(values?.min_salary), Number(values?.max_salary)]}
         min={500}
         max={1000000}
         range

@@ -7,9 +7,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useUrlSearchParams } from "@/hooks/useUrlQuery";
 import { JobParams } from "@/services/types";
 import { SEARCHPARAMS_QUERIES } from "@/utils/constants";
+import { useUrlSearchParams } from "@/utils/hooks/useUrlQuery";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
@@ -55,6 +55,8 @@ export const JobSearch = ({
       limit: 4,
       searchQuery: undefined,
       job_mode: undefined,
+      job_type: [],
+      experience_level: undefined,
     });
     clearParams();
   };

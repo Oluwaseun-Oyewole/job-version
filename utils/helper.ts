@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { auth } from "@/auth";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { jwtVerify, SignJWT } from "jose";
 import Cookies from "js-cookie";
 import toast, { ToastOptions } from "react-hot-toast";
 
@@ -98,3 +101,43 @@ export const formatCurrency = (
     currency: currencyCode ?? "USD",
   }).format(amount);
 };
+
+export async function generateCustomToken(
+  user: any,
+  secret: Uint8Array<ArrayBufferLike>
+): Promise<string> {
+  const customPayload = {
+    userId: user.id,
+    email: user.email,
+    name: user.name,
+    issuedAt: Math.floor(Date.now() / 1000),
+    expiresIn: "24h",
+  };
+
+  const token = await new SignJWT(customPayload)
+    .setProtectedHeader({ alg: "HS256" })
+    .setExpirationTime("7d")
+    // .setIssuedAt()
+    .sign(secret);
+
+  return token;
+}
+
+export async function verifyCustomToken(
+  token: string,
+  secret: Uint8Array<ArrayBufferLike>
+) {
+  try {
+    const { payload } = await jwtVerify(token, secret);
+    return payload;
+  } catch (error) {
+    throw new Error("Invalid token");
+  }
+}
+
+export async function isServerTokenValid() {
+  const session = await auth();
+  const expireAt = session?.user?.exp as number;
+  const currentTime = Math.floor(Date.now() / 1000);
+  return expireAt > currentTime;
+}

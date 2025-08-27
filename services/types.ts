@@ -1,10 +1,14 @@
-import { Experience, Job_type, JobMode } from "@/types";
+import { Experience, JobMode, Job_type } from "@/utils/types";
 
 export type JobParams = {
   page: number;
   limit: number;
   searchQuery?: string | undefined;
   job_mode?: string | undefined;
+  job_type: string[];
+  experience_level: string | undefined;
+  min_salary?: number;
+  max_salary?: number;
 };
 
 export type JobType = {
@@ -23,10 +27,12 @@ export type JobType = {
   job_mode?: JobMode;
   job_type?: Job_type;
   mode_of_submission?: string;
-  user_id: string;
+  user_id?: string;
   no_of_hires?: string;
   slug: string;
 };
+
+export type JobDTO = { email?: string } & JobType;
 
 export type JobResponse = {
   jobs: JobType[];

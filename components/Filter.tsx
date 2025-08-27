@@ -9,49 +9,21 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useUrlSearchParams } from "@/hooks/useUrlQuery";
-import { JobsProps, ValuesInterface } from "@/types";
 import {
   experience,
   jobType,
   SEARCHPARAMS_QUERIES,
   sortBy,
 } from "@/utils/constants";
+import { useUrlSearchParams } from "@/utils/hooks/useUrlQuery";
+import { JobParams, JobsProps } from "@/utils/types";
 import classNames from "classnames";
 import "rc-slider/assets/index.css";
 import { useState } from "react";
+import Checkbox from "./Checkbox";
 import SliderComponent from "./Slider";
 
-const CheckBoxInput = ({
-  name,
-  id,
-  value,
-  checked,
-  job,
-  onChange,
-}: {
-  name: string;
-  id: string;
-  value: string;
-  checked: boolean;
-  job: any;
-  onChange: (value: string, checked: boolean) => void;
-}) => {
-  return (
-    <input
-      type="checkbox"
-      name={name}
-      id={id}
-      value={value}
-      checked={checked}
-      onChange={(e) => onChange(value, e.target.checked)}
-      className="h-[15px] w-[17px] focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
-    />
-  );
-};
-
 export const Filter = ({ isLoading, data, params, setParams }: JobsProps) => {
-  const [jobExperience, setJobExperience] = useState(experience);
   const { setParam, clearParams, getParam, setURLParams } =
     useUrlSearchParams();
 
@@ -61,8 +33,10 @@ export const Filter = ({ isLoading, data, params, setParams }: JobsProps) => {
     flexJustifyBetween: "flex justify-between",
   };
 
-  const [values, setValues] = useState<ValuesInterface>({
+  const [values, setValues] = useState<JobParams>({
+    page: Number(getParam(SEARCHPARAMS_QUERIES.page)) ?? 1,
     searchQuery: getParam(SEARCHPARAMS_QUERIES.search) ?? "",
+    limit: 5,
     job_mode: getParam(SEARCHPARAMS_QUERIES.job_mode) ?? "",
     sort_by: getParam(SEARCHPARAMS_QUERIES.sort_by) ?? sortBy[0]?.value,
     min_salary:
@@ -73,6 +47,9 @@ export const Filter = ({ isLoading, data, params, setParams }: JobsProps) => {
       Number(getParam(SEARCHPARAMS_QUERIES.max_salary)) > 0
         ? Number(getParam(SEARCHPARAMS_QUERIES.max_salary))
         : 1000000,
+    job_type: getParam(SEARCHPARAMS_QUERIES.job_type)?.split(",") || [],
+    experience_level:
+      getParam(SEARCHPARAMS_QUERIES.experience_level) ?? experience[0]?.value,
   });
 
   const clearFilters = () => {
@@ -84,6 +61,8 @@ export const Filter = ({ isLoading, data, params, setParams }: JobsProps) => {
       max_salary: undefined,
       searchQuery: undefined,
       job_mode: undefined,
+      job_type: [],
+      experience_level: "",
     });
     clearParams();
     setValues({
@@ -92,6 +71,10 @@ export const Filter = ({ isLoading, data, params, setParams }: JobsProps) => {
       searchQuery: "",
       job_mode: "",
       sort_by: sortBy[0]?.value,
+      job_type: [],
+      experience_level: "",
+      limit: 5,
+      page: 1,
     });
   };
 
@@ -99,6 +82,49 @@ export const Filter = ({ isLoading, data, params, setParams }: JobsProps) => {
     setParam(SEARCHPARAMS_QUERIES.sort_by, value);
     setValues((prev) => ({ ...prev, sort_by: value }));
     setParams((prev) => ({ ...prev, sort_by: value }));
+  };
+
+  const onJobFilter = (value: string) => {
+    setParam(SEARCHPARAMS_QUERIES.experience_level, value);
+    setValues((prev) => ({ ...prev, experience_level: value }));
+    setParams((prev) => ({ ...prev, experience_level: value }));
+  };
+
+  // useEffect(() => {
+  //   if (values.job_type.length > 0) {
+  //     setParam(SEARCHPARAMS_QUERIES.job_type, values.job_type.join(","));
+  //   } else {
+  //     setParam(SEARCHPARAMS_QUERIES.job_type, "");
+  //   }
+  // }, [values.job_type, setParam]);
+
+  const handleJobTypeChange = (value: string, isChecked: boolean) => {
+    let newJobTypes;
+    setValues((prev) => {
+      newJobTypes = [...prev.job_type];
+      if (isChecked) {
+        newJobTypes.push(value);
+      } else {
+        newJobTypes = newJobTypes.filter((job) => job !== value);
+      }
+      return { ...prev, job_type: newJobTypes };
+    });
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
+    setParams((prev) => {
+      let newJobTypes = [...(prev.job_type || [])];
+      console.log("new job types", newJobTypes);
+      if (isChecked) {
+        newJobTypes.push(value);
+      } else {
+        newJobTypes = newJobTypes.filter((type) => type !== value);
+      }
+      return {
+        ...prev,
+        job_type: newJobTypes.length > 0 ? [...newJobTypes] : undefined,
+      };
+    });
   };
 
   const salaryFilter = () => {
@@ -189,7 +215,56 @@ export const Filter = ({ isLoading, data, params, setParams }: JobsProps) => {
           <SliderComponent values={values} setValues={setValues} />
         </div>
       </div>
+
       <div className={styles.border}>
+        <h2 className="pb-4 font-bold">Experience</h2>
+        <div className="w-[92%]">
+          <div className="grid grid-flow-cols grid-cols-[50%_50%] gap-3">
+            <RadioGroup
+              value={values?.experience_level}
+              className="w-[92%] font-[300]"
+              onValueChange={(e) => onJobFilter(e)}
+            >
+              <div className="grid gap-3 grid-cols-[50%_50%] items-center">
+                {experience?.map((experience, index) => {
+                  return (
+                    <div
+                      className={classNames(styles.flexCenterSpace)}
+                      key={index}
+                    >
+                      <RadioGroupItem
+                        value={`${experience.value}`}
+                        id={`${experience.value}`}
+                      />
+                      <Label
+                        htmlFor={`${experience.value}`}
+                        className="hidden lg:block"
+                      >
+                        {experience.label}
+                      </Label>
+
+                      <Label htmlFor="most-recent" className="block lg:hidden">
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger className="line-clamp-1">
+                              {experience.label.substring(0, 5) + "..."}
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>{experience.label}</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </Label>
+                    </div>
+                  );
+                })}
+              </div>
+            </RadioGroup>
+          </div>
+        </div>
+      </div>
+
+      <div className="pt-6">
         <h2 className="pb-4 font-bold">Job Type</h2>
 
         <div className="w-[92%]">
@@ -206,58 +281,13 @@ export const Filter = ({ isLoading, data, params, setParams }: JobsProps) => {
                       "space-x-0 gap-0"
                     )}
                   >
-                    <CheckBoxInput
-                      name="experience"
+                    <Checkbox
+                      name="job_type"
                       id={job.value}
                       value={job.value}
-                      checked
-                      job={job}
-                      onChange={() => {}}
-                      //   onChange={handleJobExperienceChange}
+                      checked={values?.job_type?.includes(job?.value)}
+                      onChangeHandler={handleJobTypeChange}
                     />
-                    <Label htmlFor={job.value}>{job.label}</Label>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
-      <div className="pt-6">
-        <h2 className="pb-4 font-bold">Experience</h2>
-        <div className="w-[92%]">
-          <div className="grid grid-flow-cols grid-cols-[50%_50%] gap-3">
-            {jobExperience?.map((job, index) => {
-              return (
-                <div
-                  className={classNames(styles.flexJustifyBetween)}
-                  key={index}
-                >
-                  <div
-                    className={classNames(
-                      styles.flexCenterSpace,
-                      "space-x-0 gap-1"
-                    )}
-                  >
-                    {/* <Checkbox
-                      value={job.value}
-                      // checked={job.checked}
-                      className="!border-2 !border-red-500 !h-5 !w-5"
-                      onCheckedChange={() => {
-                        console.log("on chnange -- ");
-                      }}
-                    /> */}
-                    <CheckBoxInput
-                      name="experience"
-                      id={job.value}
-                      value={job.value}
-                      checked
-                      job={job}
-                      onChange={() => {}}
-                      //   onChange={handleJobExperienceChange}
-                    />
-
                     <Label htmlFor={job.value}>{job.label}</Label>
                   </div>
                 </div>

@@ -1,8 +1,8 @@
 "use client";
-import { useUrlSearchParams } from "@/hooks/useUrlQuery";
 import { useGetJobs } from "@/services/queries";
 import { JobParams } from "@/services/types";
 import { SEARCHPARAMS_QUERIES } from "@/utils/constants";
+import { useUrlSearchParams } from "@/utils/hooks/useUrlQuery";
 import { useState } from "react";
 import JobDetails from "./JobDescription";
 import Jobs from "./Jobs";
@@ -20,6 +20,9 @@ const AllJobs = () => {
     limit: limit > 0 ? limit : 5,
     searchQuery: searchQuery ? searchQuery : undefined,
     job_mode: job_mode ? job_mode : undefined,
+    experience_level:
+      getParam(SEARCHPARAMS_QUERIES.experience_level) ?? undefined,
+    job_type: getParam(SEARCHPARAMS_QUERIES.job_type)?.split(",") || [],
   });
   const { data, isLoading, refetch, isSuccess } = useGetJobs(params);
 

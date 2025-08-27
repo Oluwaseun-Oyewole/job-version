@@ -1,4 +1,4 @@
-import { JobType } from "./services/types";
+import { JobType } from "@/services/types";
 
 enum EnumJobType {
   fulltime = "fulltime",
@@ -50,8 +50,8 @@ export interface JobParams {
   sort_by?: string;
   min_salary?: number;
   max_salary?: number;
-  // job_type: string[];
-  // experience_level: string[];
+  job_type: string[];
+  experience_level: string | undefined;
 }
 
 export interface JobsData {
@@ -81,12 +81,4 @@ export interface JobDetailsProps {
   selectedJob?: Job;
   isLoading: boolean;
   isSuccess: boolean;
-}
-
-export interface ValuesInterface {
-  searchQuery: string;
-  job_mode: string;
-  sort_by: string;
-  min_salary: number;
-  max_salary: number;
 }

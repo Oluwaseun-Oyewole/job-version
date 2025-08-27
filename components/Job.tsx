@@ -62,15 +62,12 @@ const Job = ({ data, isLoading }: { data?: JobType[]; isLoading: boolean }) => {
                       )}
 
                       <h1 className="text-sm">{job?.job_title}</h1>
-                      {`(${job?.company_name} ${
-                        dateFormat(job?.created_at) !== "2 days ago" ? (
-                          <small className="text-red-500 text-[10px] rounded-lg border-[0.5px] border-red-500 px-1">
-                            New
-                          </small>
-                        ) : (
-                          ""
-                        )
-                      })`}
+                      {`(${job?.company_name})`}
+                      {dateFormat(job?.created_at) <= "3 days ago" && (
+                        <small className="text-red-500 text-[10px] rounded-lg border-[0.7px] font-medium border-red-500 px-1">
+                          New
+                        </small>
+                      )}
                     </div>
 
                     <div className="flex items-center justify-between text-sm">
