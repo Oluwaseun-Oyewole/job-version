@@ -5,6 +5,7 @@ import "next-auth/jwt";
 export type ExtendedUser = DefaultSession["user"] & {
   exp: number | undefined;
   jobs: any;
+  id: number | undefined;
 };
 
 declare module "next-auth" {

@@ -73,13 +73,12 @@ model Jobs{
   id                String @default(cuid()) @id
   job_title         String
   company_name      String
-  company_logo     String?
-  company_info      String?
+  company_info      String
   created_at        DateTime @default(now())
   salary            Int?
-  job_description   String
+  job_description   String 
   slug              String @unique
-  skills            String?
+  skills            String
   benefits           String?
   location          String?
   experience_level  EXPERIENCE?

@@ -42,3 +42,20 @@ export const SEARCHPARAMS_QUERIES = {
   job_type: "job_type",
   experience_level: "experience_level",
 };
+export const EXPERIENCE_LEVELS = [
+  "Junior",
+  "Intermediate",
+  "Senior",
+  "Lead",
+  "Principal",
+] as const;
+
+export const JOB_TYPES = [
+  "FullTime",
+  "PartTime",
+  "Contract",
+  "Volunteer",
+  "Internship",
+] as const;
+
+export const JOB_MODES = ["Remote", "Hybrid", "Onsite"] as const;

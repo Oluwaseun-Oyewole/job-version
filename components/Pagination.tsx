@@ -26,21 +26,16 @@ const PaginationWrapper = ({
   onPrev,
   onNext,
 }: IPagination) => {
-  //   const searchParams = useSearchParams();
-  //   const router = useRouter();
-  //   const updateURLFromSearchQuery = useDebouncedCallback((page: number) => {
-  //     const params = new URLSearchParams(searchParams);
-  //     params.set("page", page.toString());
-  //     params.set("resultsPerPage", resultsPerPage.toString());
-  //     router.push(`?${params.toString()}`);
-  //   }, 50);
-
+  const [lowBound, upBound] = [
+    totalResults === 0 ? 0 : (page - 1) * resultsPerPage + 1,
+    totalResults > page * resultsPerPage ? page * resultsPerPage : totalResults,
+  ];
   return (
     <div className="flex items-center">
       <Pagination className="flex items-center gap-3 text-xs">
-        <div className="font-normal">
-          {page} to {total} of {totalPages}
-        </div>
+        <span className="font-normal">
+          {lowBound} to {upBound} of {total}
+        </span>
         <PaginationContent className="flex gap-3">
           <PaginationItem>
             <Button

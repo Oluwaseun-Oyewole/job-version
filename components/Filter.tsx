@@ -20,10 +20,9 @@ import { JobParams, JobsProps } from "@/utils/types";
 import classNames from "classnames";
 import "rc-slider/assets/index.css";
 import { useState } from "react";
-import Checkbox from "./Checkbox";
 import SliderComponent from "./Slider";
 
-export const Filter = ({ isLoading, data, params, setParams }: JobsProps) => {
+export const Filter = ({ setParams }: JobsProps) => {
   const { setParam, clearParams, getParam, setURLParams } =
     useUrlSearchParams();
 
@@ -47,7 +46,8 @@ export const Filter = ({ isLoading, data, params, setParams }: JobsProps) => {
       Number(getParam(SEARCHPARAMS_QUERIES.max_salary)) > 0
         ? Number(getParam(SEARCHPARAMS_QUERIES.max_salary))
         : 1000000,
-    job_type: getParam(SEARCHPARAMS_QUERIES.job_type)?.split(",") || [],
+    // job_type: getParam(SEARCHPARAMS_QUERIES.job_type)?.split(",") || [],
+    job_type: getParam(SEARCHPARAMS_QUERIES.job_type) ?? jobType[0]?.value,
     experience_level:
       getParam(SEARCHPARAMS_QUERIES.experience_level) ?? experience[0]?.value,
   });
@@ -61,8 +61,8 @@ export const Filter = ({ isLoading, data, params, setParams }: JobsProps) => {
       max_salary: undefined,
       searchQuery: undefined,
       job_mode: undefined,
-      job_type: [],
-      experience_level: "",
+      job_type: undefined,
+      experience_level: undefined,
     });
     clearParams();
     setValues({
@@ -71,8 +71,8 @@ export const Filter = ({ isLoading, data, params, setParams }: JobsProps) => {
       searchQuery: "",
       job_mode: "",
       sort_by: sortBy[0]?.value,
-      job_type: [],
-      experience_level: "",
+      job_type: jobType[0]?.value,
+      experience_level: experience[0]?.value,
       limit: 5,
       page: 1,
     });
@@ -84,7 +84,14 @@ export const Filter = ({ isLoading, data, params, setParams }: JobsProps) => {
     setParams((prev) => ({ ...prev, sort_by: value }));
   };
 
-  const onJobFilter = (value: string) => {
+  const handleJobFilter = (value: string) => {
+    console.log("job type - ", jobType);
+    setParam(SEARCHPARAMS_QUERIES.job_type, value);
+    setValues((prev) => ({ ...prev, job_type: value }));
+    setParams((prev) => ({ ...prev, job_type: value }));
+  };
+
+  const handleExperienceFilter = (value: string) => {
     setParam(SEARCHPARAMS_QUERIES.experience_level, value);
     setValues((prev) => ({ ...prev, experience_level: value }));
     setParams((prev) => ({ ...prev, experience_level: value }));
@@ -98,34 +105,34 @@ export const Filter = ({ isLoading, data, params, setParams }: JobsProps) => {
   //   }
   // }, [values.job_type, setParam]);
 
-  const handleJobTypeChange = (value: string, isChecked: boolean) => {
-    let newJobTypes;
-    setValues((prev) => {
-      newJobTypes = [...prev.job_type];
-      if (isChecked) {
-        newJobTypes.push(value);
-      } else {
-        newJobTypes = newJobTypes.filter((job) => job !== value);
-      }
-      return { ...prev, job_type: newJobTypes };
-    });
+  // const handleJobTypeChange = (value: string, isChecked: boolean) => {
+  //   let newJobTypes;
+  //   setValues((prev) => {
+  //     newJobTypes = [...prev.job_type];
+  //     if (isChecked) {
+  //       newJobTypes.push(value);
+  //     } else {
+  //       newJobTypes = newJobTypes.filter((job) => job !== value);
+  //     }
+  //     return { ...prev, job_type: newJobTypes };
+  //   });
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //@ts-ignore
-    setParams((prev) => {
-      let newJobTypes = [...(prev.job_type || [])];
-      console.log("new job types", newJobTypes);
-      if (isChecked) {
-        newJobTypes.push(value);
-      } else {
-        newJobTypes = newJobTypes.filter((type) => type !== value);
-      }
-      return {
-        ...prev,
-        job_type: newJobTypes.length > 0 ? [...newJobTypes] : undefined,
-      };
-    });
-  };
+  //   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  //   //@ts-ignore
+  //   setParams((prev) => {
+  //     let newJobTypes = [...(prev.job_type || [])];
+  //     console.log("new job types", newJobTypes);
+  //     if (isChecked) {
+  //       newJobTypes.push(value);
+  //     } else {
+  //       newJobTypes = newJobTypes.filter((type) => type !== value);
+  //     }
+  //     return {
+  //       ...prev,
+  //       job_type: newJobTypes.length > 0 ? [...newJobTypes] : undefined,
+  //     };
+  //   });
+  // };
 
   const salaryFilter = () => {
     setURLParams({
@@ -223,7 +230,7 @@ export const Filter = ({ isLoading, data, params, setParams }: JobsProps) => {
             <RadioGroup
               value={values?.experience_level}
               className="w-[92%] font-[300]"
-              onValueChange={(e) => onJobFilter(e)}
+              onValueChange={(e) => handleExperienceFilter(e)}
             >
               <div className="grid gap-3 grid-cols-[50%_50%] items-center">
                 {experience?.map((experience, index) => {
@@ -264,7 +271,55 @@ export const Filter = ({ isLoading, data, params, setParams }: JobsProps) => {
         </div>
       </div>
 
-      <div className="pt-6">
+      <div className={styles.border}>
+        <h2 className="pb-4 font-bold">Job Type</h2>
+        <div className="w-[92%]">
+          <div className="grid grid-flow-cols grid-cols-[50%_50%] gap-3">
+            <RadioGroup
+              value={values?.job_type}
+              className="w-[92%] font-[300]"
+              onValueChange={(e) => handleJobFilter(e)}
+            >
+              <div className="grid gap-3 grid-cols-[50%_50%] items-center">
+                {jobType?.map((job, index) => {
+                  return (
+                    <div
+                      className={classNames(styles.flexCenterSpace)}
+                      key={index}
+                    >
+                      <RadioGroupItem
+                        value={`${job.value}`}
+                        id={`${job.value}`}
+                      />
+                      <Label
+                        htmlFor={`${job.value}`}
+                        className="hidden lg:block"
+                      >
+                        {job.label}
+                      </Label>
+
+                      <Label htmlFor="most-recent" className="block lg:hidden">
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger className="line-clamp-1">
+                              {job.label.substring(0, 5) + "..."}
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>{job.label}</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </Label>
+                    </div>
+                  );
+                })}
+              </div>
+            </RadioGroup>
+          </div>
+        </div>
+      </div>
+
+      {/* <div className="pt-6">
         <h2 className="pb-4 font-bold">Job Type</h2>
 
         <div className="w-[92%]">
@@ -295,7 +350,7 @@ export const Filter = ({ isLoading, data, params, setParams }: JobsProps) => {
             })}
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

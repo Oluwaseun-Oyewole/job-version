@@ -132,7 +132,7 @@ const JobDetails = () => {
               <div className="py-6 border__bottom font-[300] text-sm">
                 <h2 className="font-bold text-xl">Base Salary</h2>
                 <p className="pt-3 leading-5 text-gray-600">
-                  &#36;{firstJob.salary}K/month
+                  &#36;{firstJob.salary}K/annum
                 </p>
 
                 <Link href={`/job-description/${firstJob?.slug}`}>

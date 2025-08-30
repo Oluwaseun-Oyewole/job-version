@@ -22,7 +22,6 @@ export const capitalize = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-// utils/slugify.ts
 export function slugify(text: string): string {
   return text
     .toString()

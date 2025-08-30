@@ -101,13 +101,17 @@ export const GET = async (req: NextRequest) => {
         orderBy = { created_at: "desc" };
     }
 
-    const jobs = await prisma.jobs.findMany({
-      where,
-      skip: (page - 1) * limit,
-      take: limit,
-      orderBy,
-    });
-    const total = await prisma.jobs.count();
+    // for parallel queries
+    const [jobs, total] = await Promise.all([
+      prisma.jobs.findMany({
+        where,
+        skip: (page - 1) * limit,
+        take: limit,
+        orderBy,
+      }),
+      prisma.jobs.count({ where }),
+    ]);
+
     const totalPages = Math.ceil(total / limit) ?? 1;
     return NextResponse.json(
       {

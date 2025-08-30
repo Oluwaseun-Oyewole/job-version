@@ -1,6 +1,5 @@
 import GoBack from "@/components/Back";
 import prisma from "@/lib/prisma";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 
 //TODO remove any
@@ -48,15 +47,6 @@ const JobDetails = async ({ params }: PageProps) => {
       <div className="flex justify-between">
         <div className="flex gap-4 sticky top-0 left-0">
           <h1 className="font-extrabold text-2xl">{job?.job_title}</h1>
-          {job?.company_logo && (
-            <Image
-              src={job?.company_logo}
-              alt="netflix"
-              className="w-8"
-              height={50}
-              width={50}
-            />
-          )}
         </div>
       </div>
       <div className="font-[400] flex flex-col ">

@@ -1,10 +1,10 @@
 import AllJobs from "@/components/Home";
-import LoadingSpinner from "@/components/Loading";
+import Spinner from "@/components/Spinner";
 import { Suspense } from "react";
 
 export default async function Home() {
   return (
-    <Suspense fallback={<LoadingSpinner />}>
+    <Suspense fallback={<Spinner />}>
       <AllJobs />
     </Suspense>
   );

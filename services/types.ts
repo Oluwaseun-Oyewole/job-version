@@ -5,7 +5,7 @@ export type JobParams = {
   limit: number;
   searchQuery?: string | undefined;
   job_mode?: string | undefined;
-  job_type: string[];
+  job_type: string | undefined;
   experience_level: string | undefined;
   min_salary?: number;
   max_salary?: number;

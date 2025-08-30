@@ -2,11 +2,12 @@ import { JobType } from "@/services/types";
 import { useLikedJobsStore } from "@/store/likedJobsStore";
 import { dateFormat, formatCurrency, Toastify, truncate } from "@/utils/helper";
 import { routes } from "@/utils/routes";
+import dayjs from "dayjs";
 import { MapPin, Pin, PinOff } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { JobCardSkeleton } from "./skeletons/JobCardSkeleton";
 import { Button } from "./ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 export interface SavedJobInterface {
   id: string;
@@ -50,31 +51,39 @@ const Job = ({ data, isLoading }: { data?: JobType[]; isLoading: boolean }) => {
             <div key={job?.id}>
               <div className="flex justify-between flex-col">
                 <div className="mb-5 min-h-[230px] bg-white rounded-lg shadow-md hover:shadow-lg xl:flex flex-col gap-4 px-5 py-5 font-[400] justify-between">
-                  <div className="flex flex-col gap-3">
+                  <div className="flex flex-col gap-3 relative">
                     <div className="flex items-center gap-1">
-                      {job?.company_logo && (
-                        <Image
-                          src={job?.company_logo}
-                          alt="job image"
-                          width={50}
-                          height={50}
-                        />
-                      )}
+                      <div className="w-fit">
+                        <h1 className="text-md">{job?.job_title}</h1>
+                      </div>
 
-                      <h1 className="text-sm">{job?.job_title}</h1>
-                      {`(${job?.company_name})`}
-                      {dateFormat(job?.created_at) <= "3 days ago" && (
-                        <small className="text-red-500 text-[10px] rounded-lg border-[0.7px] font-medium border-red-500 px-1">
-                          New
-                        </small>
-                      )}
+                      <>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <div className="text-sm">{`(${truncate(
+                              job?.company_name,
+                              5
+                            )})`}</div>
+                          </TooltipTrigger>
+                          <TooltipContent>{job?.company_name}</TooltipContent>
+                        </Tooltip>
+                        <div className="absolute -top-4 right-0">
+                          {dayjs().diff(dayjs(job?.created_at), "day") < 3 ? (
+                            <small className="text-red-500 text-[10px] rounded-lg border-[0.7px] font-medium border-red-500 px-1">
+                              New
+                            </small>
+                          ) : null}
+                        </div>
+                      </>
                     </div>
 
                     <div className="flex items-center justify-between text-sm">
-                      <div className="flex items-center gap-1">
-                        <MapPin size={12} />
-                        <p className="">{job?.location}</p>
-                      </div>
+                      {job?.location && (
+                        <div className="flex items-center gap-1">
+                          <MapPin size={12} />
+                          <p className="">{job?.location}</p>
+                        </div>
+                      )}
                       {isJobLiked(job?.id) ? (
                         <Button
                           onClick={() => handleLikeToggle(job)}
@@ -98,13 +107,13 @@ const Job = ({ data, isLoading }: { data?: JobType[]; isLoading: boolean }) => {
 
                   <div>
                     <p className="text-sm ">
-                      {formatCurrency(job?.salary ?? 0)}/month
+                      {formatCurrency(job?.salary ?? 0)}/annum
                     </p>
                     <div className="flex justify-between items-center text-sm mt-2">
                       <p className="">{dateFormat(job?.created_at)}</p>
 
                       <Link href={routes.description(job?.slug)}>
-                        <p className="text-deepBlue">Job details</p>
+                        <p className="text-deepBlue">Details</p>
                       </Link>
                     </div>
                   </div>

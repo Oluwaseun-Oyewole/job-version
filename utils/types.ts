@@ -50,7 +50,7 @@ export interface JobParams {
   sort_by?: string;
   min_salary?: number;
   max_salary?: number;
-  job_type: string[];
+  job_type: string | undefined;
   experience_level: string | undefined;
 }
 

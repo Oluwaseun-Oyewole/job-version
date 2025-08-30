@@ -42,7 +42,7 @@ export const {
   },
   callbacks: {
     async session({ session, token }) {
-      const userJobs = await prisma.user.findFirst({
+      const user = await prisma.user.findFirst({
         where: {
           email: token?.email,
         },
@@ -52,14 +52,17 @@ export const {
       });
       if (session?.user) {
         session.user.exp = token.exp;
-        session.user.jobs = userJobs?.jobs;
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
+        session.user.id = user?.id;
+        session.user.jobs = user?.jobs;
       }
       return {
         ...session,
         token: token.token,
         user: {
           ...session.user,
-          jobs: userJobs?.jobs,
+          jobs: user?.jobs,
         },
       };
     },

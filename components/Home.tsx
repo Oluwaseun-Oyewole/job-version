@@ -17,12 +17,13 @@ const AllJobs = () => {
   const limit = Number(getParam(SEARCHPARAMS_QUERIES.limit));
   const [params, setParams] = useState<JobParams>({
     page: page > 0 ? page : 1,
-    limit: limit > 0 ? limit : 5,
+    limit: limit > 0 ? limit : 4,
     searchQuery: searchQuery ? searchQuery : undefined,
     job_mode: job_mode ? job_mode : undefined,
     experience_level:
       getParam(SEARCHPARAMS_QUERIES.experience_level) ?? undefined,
-    job_type: getParam(SEARCHPARAMS_QUERIES.job_type)?.split(",") || [],
+    // job_type: getParam(SEARCHPARAMS_QUERIES.job_type)?.split(",") || [],
+    job_type: getParam(SEARCHPARAMS_QUERIES.job_type) || undefined,
   });
   const { data, isLoading, refetch, isSuccess } = useGetJobs(params);
 

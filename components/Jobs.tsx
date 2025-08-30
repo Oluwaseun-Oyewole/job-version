@@ -1,5 +1,7 @@
 "use client";
 import { useJobberStore } from "@/store";
+import { SEARCHPARAMS_QUERIES } from "@/utils/constants";
+import { useUrlSearchParams } from "@/utils/hooks/useUrlQuery";
 import { JobsProps } from "@/utils/types";
 import { useEffect } from "react";
 import Job from "./Job";
@@ -7,6 +9,7 @@ import PaginationWrapper from "./Pagination";
 import { JobSearch } from "./Search";
 
 const Jobs = ({ isLoading, isSuccess, data, params, setParams }: JobsProps) => {
+  const { setParam } = useUrlSearchParams();
   const { updateData, setIsLoading } = useJobberStore();
   useEffect(() => {
     if (isSuccess) {
@@ -16,14 +19,16 @@ const Jobs = ({ isLoading, isSuccess, data, params, setParams }: JobsProps) => {
   }, [isSuccess, isLoading, data?.jobs]);
 
   const onNext = () => {
-    return setParams((prev) => ({ ...prev, page: Number(params?.page) + 1 }));
+    setParam(SEARCHPARAMS_QUERIES.page, params.page + 1);
+    setParams((prev) => ({ ...prev, page: Number(params?.page) + 1 }));
   };
   const onPrev = () => {
-    return setParams((prev) => ({ ...prev, page: Number(params?.page) - 1 }));
+    setParam(SEARCHPARAMS_QUERIES.page, params.page - 1);
+    setParams((prev) => ({ ...prev, page: Number(params?.page) - 1 }));
   };
 
   return (
-    <div className="flex flex-col gap-3 overflow-y-scroll">
+    <div className="flex flex-col gap-3 overflow-y-scroll h-[90vh]">
       <div className="bg-lightGray bg-transparent z-10">
         <JobSearch setParams={setParams} params={params} />
       </div>

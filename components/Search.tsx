@@ -55,7 +55,7 @@ export const JobSearch = ({
       limit: 4,
       searchQuery: undefined,
       job_mode: undefined,
-      job_type: [],
+      job_type: undefined,
       experience_level: undefined,
     });
     clearParams();
@@ -100,7 +100,7 @@ export const JobSearch = ({
             className="bg-deepBlue h-[45px] lg:ml-5 hover:bg-lightBlue rounded-sm"
             onClick={clearFilters}
           >
-            Clear filter(s)
+            Clear
           </Button>
         )}
       </div>
