@@ -4,7 +4,6 @@ import { useJobberStore } from "@/store";
 import { useLikedJobsStore } from "@/store/likedJobsStore";
 import { Toastify, truncate } from "@/utils/helper";
 import { Pin, PinOff } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 
 const JobDetails = () => {
@@ -58,16 +57,6 @@ const JobDetails = () => {
             </div>
           ) : (
             <>
-              <div className="flex justify-between">
-                {firstJob?.company_logo && (
-                  <Image
-                    src={firstJob?.company_logo}
-                    alt="netflix"
-                    height={50}
-                    width={50}
-                  />
-                )}
-              </div>
               <div className="py-6 flex gap-2 flex-col border__bottom">
                 <h1 className="font-bolder text-xl">{data[0]?.job_title}</h1>
                 <div className="flex gap-3 text-sm font-[300] text-gray-500">
