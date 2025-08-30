@@ -136,6 +136,7 @@ export async function verifyCustomToken(
 
 export async function isServerTokenValid() {
   const session = await auth();
+  console.log("session", session);
   const expireAt = session?.user?.exp as number;
   const currentTime = Math.floor(Date.now() / 1000);
   return expireAt > currentTime;

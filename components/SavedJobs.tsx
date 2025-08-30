@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/table";
 import { useLikedJobsStore } from "@/store/likedJobsStore";
 import { formatCurrency } from "@/utils/helper";
+import { routes } from "@/utils/routes";
 import { Trash2 } from "lucide-react";
 import Link from "next/link";
 
@@ -31,7 +32,7 @@ const SavedJobs = () => {
             <TableRow key={job?.id}>
               <TableCell className="font-medium">
                 <Link
-                  href={`job-description/${job.id}`}
+                  href={routes.description(job?.slug)}
                   className="text-deepBlue"
                 >
                   {job?.company_name}

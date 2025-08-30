@@ -82,3 +82,12 @@ export interface JobDetailsProps {
   isLoading: boolean;
   isSuccess: boolean;
 }
+
+export interface IRoutesType {
+  id: number;
+  path?: string;
+  icon?: HTMLImageElement;
+  title: string;
+  disabled?: boolean;
+}
+[];

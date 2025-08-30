@@ -1,3 +1,8 @@
+import JobIcon from "@/assets/briefcase.svg";
+import DashboardIcon from "@/assets/dash.svg";
+import { routes } from "./routes";
+import { IRoutesType } from "./types";
+
 export const jobType = [
   { id: 1, label: "FullTime", value: "fulltime" },
   { id: 2, label: "PartTime", value: "parttime" },
@@ -59,3 +64,19 @@ export const JOB_TYPES = [
 ] as const;
 
 export const JOB_MODES = ["Remote", "Hybrid", "Onsite"] as const;
+
+export const dashboardRoutes: IRoutesType[] = [
+  {
+    id: 0,
+    path: routes.dashboard,
+    icon: DashboardIcon,
+    title: "Dashboard",
+  },
+
+  {
+    id: 1,
+    icon: JobIcon,
+    path: routes.postJob,
+    title: "Create Jobs",
+  },
+];

@@ -7,6 +7,7 @@ import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "../assets/logo-f.svg";
+import { SidebarDrawer } from "./SidebarDrawer";
 import { Button } from "./ui/button";
 
 export const Navigation = () => {
@@ -21,16 +22,19 @@ export const Navigation = () => {
         </Link>
 
         <div className="flex items-center gap-4">
-          <Link href={routes.notification}>
-            <div className="cursor-pointer rounded-full border-2 border-gray-300 p-2 relative">
-              <Bell size={17} />
-              {likedJobs?.length > 0 && (
-                <div className="h-4 w-4 bg-red-500 rounded-full text-[8px] font-bold absolute -top-[2px] z-20 -right-[3px] text-white flex items-center justify-center">
-                  {likedJobs?.length}
-                </div>
-              )}
-            </div>
-          </Link>
+          {status === "authenticated" && <SidebarDrawer />}
+          {status === "unauthenticated" && (
+            <Link href={routes.notification}>
+              <div className="cursor-pointer rounded-full border-2 border-gray-300 p-2 relative">
+                <Bell size={17} />
+                {likedJobs?.length > 0 && (
+                  <div className="h-4 w-4 bg-red-500 rounded-full text-[8px] font-bold absolute -top-[2px] z-20 -right-[3px] text-white flex items-center justify-center">
+                    {likedJobs?.length}
+                  </div>
+                )}
+              </div>
+            </Link>
+          )}
           <Link href={routes.postJob}>
             <Button className="cursor-pointer bg-deepBlue text-white hover:opacity-90 hover:bg-deepBlue">
               Post a job

@@ -15,12 +15,11 @@ export type JobType = {
   id: string;
   job_title: string;
   company_name: string;
-  company_logo?: string;
-  company_info?: string;
+  company_info: string;
   created_at: Date;
-  salary?: number;
+  salary: number;
   job_description: string;
-  skills?: string;
+  skills: string;
   benefits?: string;
   location?: string;
   experience_level?: Experience;

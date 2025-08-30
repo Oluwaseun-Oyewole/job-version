@@ -13,7 +13,7 @@ export async function getJobs() {
       orderBy: { created_at: "desc" },
     });
   } catch (error) {
-    throw new Error("Failed to fetch users");
+    throw new Error("Failed to fetch jobs");
   }
 }
 
