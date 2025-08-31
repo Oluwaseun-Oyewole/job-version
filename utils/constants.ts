@@ -77,6 +77,6 @@ export const dashboardRoutes: IRoutesType[] = [
     id: 1,
     icon: JobIcon,
     path: routes.postJob,
-    title: "Create Jobs",
+    title: "Create Job",
   },
 ];

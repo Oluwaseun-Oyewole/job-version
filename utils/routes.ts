@@ -3,6 +3,6 @@ export const routes = {
   login: "/login",
   notification: "/notifications",
   dashboard: "/dashboard",
-  postJob: "/dashboard/post-job",
+  postJob: "/dashboard/create-job",
   description: (slug: string) => `/job-description/${slug}`,
 };

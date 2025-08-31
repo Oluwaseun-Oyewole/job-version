@@ -49,7 +49,13 @@ const Jobs = ({ isLoading, isSuccess, data, params, setParams }: JobsProps) => {
         </div>
 
         <div className="overflow-y-scroll">
-          <Job data={data?.jobs} isLoading={isLoading} />
+          {!data && !isLoading ? (
+            <div className="h-[40vh] flex items-center justify-center bg-white shadow-lg">
+              Oops, service currently unavailable, please try again
+            </div>
+          ) : (
+            <Job data={data?.jobs} isLoading={isLoading} />
+          )}
         </div>
       </div>
     </div>
