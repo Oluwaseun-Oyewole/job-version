@@ -5,12 +5,11 @@ import { useActionState } from "react";
 import ErrorAlert from "../ErrorAlert";
 import Spinner from "../Spinner";
 import { Button } from "../ui/button";
-import { Input } from "../ui/input";
 
 export default function CreateJobForm() {
   const [state, formAction, isPending] = useActionState(createJob, null);
   const style =
-    "w-full px-4 py-3 bg-gray-50 border border-gray-300 text-sm rounded-lg focus:outline-none h-[20] focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder:text-sm resize-none";
+    "w-full px-4 py-3 bg-gray-50 border border-gray-300 text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder:text-sm resize-none";
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 h-[20vh]">
@@ -38,7 +37,7 @@ export default function CreateJobForm() {
                 >
                   Job Title <span className="text-red-500">*</span>
                 </label>
-                <Input
+                <input
                   type="text"
                   id="job_title"
                   name="job_title"
@@ -55,7 +54,7 @@ export default function CreateJobForm() {
                 >
                   Company Name <span className="text-red-500">*</span>
                 </label>
-                <Input
+                <input
                   type="text"
                   id="company_name"
                   name="company_name"
@@ -89,7 +88,7 @@ export default function CreateJobForm() {
                 >
                   Annual Salary (USD)
                 </label>
-                <Input
+                <input
                   type="number"
                   id="salary"
                   name="salary"
@@ -106,7 +105,7 @@ export default function CreateJobForm() {
                 >
                   Location
                 </label>
-                <Input
+                <input
                   type="text"
                   id="location"
                   name="location"
@@ -146,7 +145,7 @@ export default function CreateJobForm() {
               >
                 Job Slug <span className="text-red-500">*</span>
               </label>
-              <Input
+              <input
                 type="text"
                 id="slug"
                 name="slug"
