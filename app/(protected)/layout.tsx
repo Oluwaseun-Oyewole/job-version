@@ -19,7 +19,9 @@ export default async function RootLayout({
         <div className="hidden lg:block sticky top-0 left-0 h-screen bg-white overflow-hidden">
           <Sidebar />
         </div>
-        <div className="overflow-y-scroll bg-gray-100 md:my-10">{children}</div>
+        <div className="overflow-y-scroll bg-gray-100 my-5 md:my-10 px-6 md:px-0 min-h-screen">
+          {children}
+        </div>
       </main>
     </div>
   );
