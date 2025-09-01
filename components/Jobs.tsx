@@ -28,7 +28,7 @@ const Jobs = ({ isLoading, isSuccess, data, params, setParams }: JobsProps) => {
   };
 
   return (
-    <div className="flex flex-col gap-3 overflow-y-scroll h-[90vh]">
+    <div className="flex flex-col gap-3">
       <div className="bg-lightGray bg-transparent z-10">
         <JobSearch setParams={setParams} params={params} />
       </div>

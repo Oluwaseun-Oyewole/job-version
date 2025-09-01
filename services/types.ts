@@ -9,6 +9,7 @@ export type JobParams = {
   experience_level: string | undefined;
   min_salary?: number;
   max_salary?: number;
+  sort_by?: string;
 };
 
 export type JobType = {

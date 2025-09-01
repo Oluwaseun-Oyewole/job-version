@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { formatCurrency } from "@/utils/helper";
-import { routes } from "@/utils/routes";
 import { Link as LinkIcon } from "lucide-react";
-import Link from "next/link";
 import {
   Table,
   TableBody,
@@ -26,7 +24,7 @@ const JobsTable = ({ jobs }: { jobs: any[] }) => {
             <TableHead className="w-[150px]">Salary</TableHead>
             <TableHead className="w-[150px]">Job mode</TableHead>
             <TableHead className="w-[150px]">Experience</TableHead>
-            <TableHead className="w-[150px]">Link</TableHead>
+            <TableHead className="w-[150px]">Full Details</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody className="overflow-y-scroll">
@@ -44,7 +42,6 @@ const JobsTable = ({ jobs }: { jobs: any[] }) => {
               </TableCell>
               <TableCell className="font-light text-deepBlue flex items-center gap-1">
                 <LinkIcon size={15} />
-                <Link href={routes.description(job?.slug)}>{job?.slug}</Link>
               </TableCell>
             </TableRow>
           ))}

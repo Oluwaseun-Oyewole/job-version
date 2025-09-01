@@ -8,9 +8,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { JobParams } from "@/services/types";
+import { useJobberStore } from "@/store";
 import { SEARCHPARAMS_QUERIES } from "@/utils/constants";
 import { useUrlSearchParams } from "@/utils/hooks/useUrlQuery";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
 export const JobSearch = ({
@@ -21,11 +22,12 @@ export const JobSearch = ({
   setParams: Dispatch<SetStateAction<JobParams>>;
 }) => {
   const { setParam, clearParams, getParam } = useUrlSearchParams();
-  const [values, setValues] = useState({
-    searchQuery: getParam(SEARCHPARAMS_QUERIES.search),
-    job_mode: getParam(SEARCHPARAMS_QUERIES.job_mode),
-  });
+  // const [values, setValues] = useState({
+  //   searchQuery: getParam(SEARCHPARAMS_QUERIES.search),
+  //   job_mode: getParam(SEARCHPARAMS_QUERIES.job_mode),
+  // });
 
+  const { values, setValues, resetValues } = useJobberStore();
   const debouncedSearch = useDebouncedCallback((value: string) => {
     onSearch(value);
     return;
@@ -33,23 +35,25 @@ export const JobSearch = ({
 
   const onSearch = async (query: string) => {
     setParam(SEARCHPARAMS_QUERIES.search, query);
-    setValues((prev) => ({ ...prev, searchQuery: query }));
     setParams((prev) => ({ ...prev, searchQuery: query }));
   };
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setValues((prev) => ({ ...prev, searchQuery: value }));
+    // setValues((prev) => ({ ...prev, searchQuery: value }));
+    setValues({ searchQuery: value });
     debouncedSearch(value);
   };
 
   const onSelectChange = (value: string) => {
     setParam(SEARCHPARAMS_QUERIES.job_mode, value);
-    setValues((prev) => ({ ...prev, job_mode: value }));
+    // setValues((prev) => ({ ...prev, job_mode: value }));
+    setValues({ job_mode: value });
     setParams((prev) => ({ ...prev, job_mode: value }));
   };
 
   const clearFilters = () => {
-    setValues({ job_mode: "", searchQuery: "" });
+    // setValues({ job_mode: "", searchQuery: "" });
+    resetValues();
     setParams({
       page: 1,
       limit: 4,
@@ -66,7 +70,7 @@ export const JobSearch = ({
       <div className="flex flex-col md:flex-row items-center gap-5">
         <div className="grid md:gap-3 lg:gap-0 w-full md:grid-cols-[60%_40%] items-center bg-white rounded-sm flex-1">
           <Input
-            value={values.searchQuery ?? ""}
+            value={values.searchQuery}
             type="search"
             className="autocomplete-input h-[52px] w-full px-8 rounded-lg !border-none font-[400] placeholder:!text-sm placeholder:!text-gray-500 outline-none"
             onChange={handleInputChange}
@@ -75,7 +79,7 @@ export const JobSearch = ({
           />
           <div className="relative">
             <Select
-              value={values.job_mode ?? ""}
+              value={values.job_mode}
               onValueChange={(value: string) => onSelectChange(value)}
             >
               <SelectTrigger className="w-full pl-8 text-sm !h-[50px] font-[400]">

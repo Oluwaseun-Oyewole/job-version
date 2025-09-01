@@ -28,23 +28,17 @@ const AllJobs = () => {
   const { data, isLoading, refetch, isSuccess } = useGetJobs(params);
 
   return (
-    <div className="flex items-center mt-7 justify-center px-4 lg:px-12">
-      <div className="w-[95%] grid grid-items-center lg:justify-center xl:grid-flow-col md:grid-cols-[35%_65%] xl:grid-cols-[25%_55%_25%] gap-4">
-        <JobsFilter
-          params={params}
-          setParams={setParams}
-          isLoading={isLoading}
-        />
-        <Jobs
-          isLoading={isLoading}
-          isSuccess={isSuccess}
-          params={params}
-          setParams={setParams}
-          refetch={refetch}
-          data={data}
-        />
-        <JobDetails />
-      </div>
+    <div className="w-[95%] grid grid-items-center justify-center lg:justify-center xl:grid-flow-col md:grid-cols-[35%_65%] xl:grid-cols-[25%_55%_25%] gap-4">
+      <JobsFilter params={params} setParams={setParams} isLoading={isLoading} />
+      <Jobs
+        isLoading={isLoading}
+        isSuccess={isSuccess}
+        params={params}
+        setParams={setParams}
+        refetch={refetch}
+        data={data}
+      />
+      <JobDetails />
     </div>
   );
 };

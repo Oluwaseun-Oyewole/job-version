@@ -12,7 +12,7 @@ export default function CreateJobForm() {
     "w-full px-4 py-3 bg-gray-50 border border-gray-300 text-sm rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder:text-sm resize-none";
 
   return (
-    <div className="max-w-4xl mx-auto h-screen overflow-y-scroll">
+    <div className="max-w-4xl mx-auto overflow-y-scroll">
       <div className="text-center mb-8">
         <h1 className="txt-xl md:text-3xl font-bold text-gray-900 mb-2">
           Create New Job Posting
@@ -324,7 +324,7 @@ export default function CreateJobForm() {
             </div>
           </div>
 
-          <div className="py-6 border-t border-gray-200">
+          <div className="pt-6 border-t border-gray-200">
             <div className="flex justify-end">
               <Button
                 type="submit"

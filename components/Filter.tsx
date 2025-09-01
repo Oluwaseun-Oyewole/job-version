@@ -85,7 +85,6 @@ export const Filter = ({ setParams }: JobsProps) => {
   };
 
   const handleJobFilter = (value: string) => {
-    console.log("job type - ", jobType);
     setParam(SEARCHPARAMS_QUERIES.job_type, value);
     setValues((prev) => ({ ...prev, job_type: value }));
     setParams((prev) => ({ ...prev, job_type: value }));
