@@ -35,8 +35,8 @@ const Notification = () => {
   }
 
   return (
-    <div className="h-[85vh] flex items-center justify-center">
-      <div className="mt-10 bg-white h-[300px] lg:h-[350px] w-[90%] md:w-[50%] rounded-lg">
+    <div className="flex items-center justify-center h-[85vh]">
+      <div className="mt-10 bg-white h-[300px] lg:h-[320px] rounded-lg">
         <div className="flex items-center justify-center flex-col h-full">
           <Bell size={80} color="#537FE7" />
           <h3 className="font-extrabold pt-2">

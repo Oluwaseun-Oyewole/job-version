@@ -9,7 +9,7 @@ export default function RootLayout({
   return (
     <>
       <Navigation />
-      <main className="h-[90vh] flex items-center justify-center p-4 lg:px-12">
+      <main className="flex items-center justify-center p-4 lg:px-12">
         {children}
       </main>
     </>

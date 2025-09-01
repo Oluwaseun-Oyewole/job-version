@@ -42,7 +42,7 @@ const JobDetails = async ({ params }: PageProps) => {
   }
 
   return (
-    <div className=" bg-white max-w-3xl mx-auto my-5 p-10 rounded-md">
+    <div className=" bg-white max-w-3xl mx-auto w-full p-10 rounded-md">
       <GoBack />
       <div className="flex justify-between">
         <div className="flex gap-4 sticky top-0 left-0">

@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${sans.className} bg-gray-200`}>
+      <body className={`${sans.className} bg-gray-100`}>
         <Toaster position="top-center" />
         <Provider>
           <main> {children}</main>
