@@ -17,12 +17,12 @@ export default async function RootLayout({
     <>
       <Navigation />
       <div
-        className={`h-[90vh] w-full grid grid-flow-col grid-cols-[100%] lg:grid-cols-[25%_75%] xl:grid-cols-[18%_82%] ${outfit.className}`}
+        className={`h-[90vh] w-full grid grid-flow-col lg:grid-cols-[25%_75%] xl:grid-cols-[18%_82%] ${outfit.className}`}
       >
         <div className="hidden lg:block sticky top-0 left-0 right-0 bottom-0 bg-white overflow-hidden">
           <Sidebar />
         </div>
-        <div className="overflow-y-scroll p-4 md:py-8">{children}</div>
+        <div className="overflow-y-scroll p-4 md:py-8 w-full">{children}</div>
       </div>
     </>
   );

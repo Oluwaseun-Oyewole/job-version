@@ -1,12 +1,24 @@
 import GoBack from "@/components/Back";
 import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
+import { cache } from "react";
 
-//TODO remove any
 interface PageProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  params: any;
+  params: Promise<{ slug: string }>;
 }
+
+// request deduplication
+const getJob = cache(async (slug: string) => {
+  const job = await prisma.jobs.findUnique({
+    where: { slug: slug },
+  });
+  return job;
+});
+
+// export async function generateStaticParams() {
+//   const jobs = await prisma.jobs.findMany();
+//   return jobs?.map((job) => job?.slug);
+// }
 
 export interface SavedJobInterface {
   id: string;
@@ -16,10 +28,8 @@ export interface SavedJobInterface {
 }
 
 export async function generateMetadata({ params }: PageProps) {
-  const job = await prisma.jobs.findUnique({
-    where: { slug: params.slug },
-  });
-
+  const { slug } = await params;
+  const job = await getJob(slug);
   if (!job) {
     return {
       title: "Job Not Found",
@@ -28,21 +38,19 @@ export async function generateMetadata({ params }: PageProps) {
 
   return {
     title: `${job.job_title} at ${job.company_name}`,
-    description: job.job_description.substring(0, 160),
+    // description: job.job_description.substring(0, 160),
   };
 }
 
 const JobDetails = async ({ params }: PageProps) => {
-  const job = await prisma.jobs.findUnique({
-    where: { slug: params.slug },
-  });
-
+  const { slug } = await params;
+  const job = await getJob(slug);
   if (!job) {
     notFound();
   }
 
   return (
-    <div className=" bg-white max-w-3xl mx-auto w-full p-10 rounded-md">
+    <div className=" bg-white max-w-3xl mx-auto w-full p-10 rounded-md my-5">
       <GoBack />
       <div className="flex justify-between">
         <div className="flex gap-4 sticky top-0 left-0">

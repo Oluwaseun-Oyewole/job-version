@@ -33,12 +33,15 @@ export const Navigation = () => {
             </div>
           </Link>
 
-          <div className="hidden md:flex items-center gap-2">
+          {status === "unauthenticated" && (
             <Link href={routes.postJob}>
               <Button className="cursor-pointer bg-deepBlue text-white hover:opacity-90 hover:bg-deepBlue">
                 Post a job
               </Button>
             </Link>
+          )}
+
+          <div className="hidden md:flex items-center gap-2">
             {status === "authenticated" && (
               <Button
                 className="cursor-pointer bg-red-500 text-white hover:bg-red-400"

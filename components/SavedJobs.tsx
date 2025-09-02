@@ -16,7 +16,7 @@ const SavedJobs = () => {
   const { removeLikedJob, likedJobs } = useLikedJobsStore();
 
   return (
-    <div className="flex justify-center items-center w-[90%] lg:w-[55%] bg-white shadow-lg rounded-md mt-14 overflow-y-scroll">
+    <div className="md:w-[90%] shadow-lg rounded-md mt-14 bg-white">
       <Table>
         <TableHeader>
           <TableRow>

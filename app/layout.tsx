@@ -5,8 +5,11 @@ import "./globals.css";
 import Provider from "./provider";
 
 export const metadata: Metadata = {
-  title: "Jobber",
+  title: { default: "Jobber", template: "" },
   description: "A job platform",
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 export default function RootLayout({

@@ -18,7 +18,7 @@ const Notification = () => {
 
   if (likedJobs?.length > 0) {
     return (
-      <div className="">
+      <div className="overflow-x-hidden">
         <Tabs
           defaultValue="saved-jobs"
           className="flex justify-between items-center flex-col"
@@ -35,25 +35,23 @@ const Notification = () => {
   }
 
   return (
-    <div className="flex items-center justify-center h-[85vh]">
-      <div className="mt-10 bg-white h-[300px] lg:h-[320px] rounded-lg">
-        <div className="flex items-center justify-center flex-col h-full">
-          <Bell size={80} color="#537FE7" />
-          <h3 className="font-extrabold pt-2">
-            Nothing right now. Check back later
-          </h3>
-          <p className="w-[90%] md:w-[60%] font-[300] py-4 text-center text-sm md:text-base">
-            This is where we notify you about your job applications and recent
-            searches.
-          </p>
+    <div className="mt-10 bg-white h-[300px] lg:h-[320px] rounded-lg">
+      <div className="flex items-center justify-center flex-col h-full">
+        <Bell size={80} color="#537FE7" />
+        <h3 className="font-extrabold pt-2">
+          Nothing right now. Check back later
+        </h3>
+        <p className="w-[90%] md:w-[60%] font-[300] py-4 text-center text-sm md:text-base">
+          This is where we notify you about your job applications and recent
+          searches.
+        </p>
 
-          <Button
-            className="bg-lightBlue hover:bg-deepBlue"
-            onClick={() => push(routes.home)}
-          >
-            Find Jobs
-          </Button>
-        </div>
+        <Button
+          className="bg-lightBlue hover:bg-deepBlue"
+          onClick={() => push(routes.home)}
+        >
+          Find Jobs
+        </Button>
       </div>
     </div>
   );

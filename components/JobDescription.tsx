@@ -22,7 +22,7 @@ const JobDetails = () => {
   };
 
   return (
-    <div className="hidden md:block bg-white rounded-lg h-[84vh] overflow-scroll shadow-md p-5 font-[400]">
+    <div className="hidden lg:block bg-white rounded-lg h-[84vh] overflow-scroll shadow-md p-5 font-[400]">
       {isLoading ? (
         <div className="flex flex-col justify-between  h-[80vh] items-center">
           <div className="flex items-center space-x-4">
