@@ -3,7 +3,6 @@ import { useLikedJobsStore } from "@/store/likedJobsStore";
 import { useIsTokenValid } from "@/utils/hooks/useToken";
 import { routes } from "@/utils/routes";
 import { Bell } from "lucide-react";
-import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "../assets/logo-f.svg";
@@ -33,15 +32,13 @@ export const Navigation = () => {
             </div>
           </Link>
 
-          {status === "unauthenticated" && (
-            <Link href={routes.postJob}>
-              <Button className="cursor-pointer bg-deepBlue text-white hover:opacity-90 hover:bg-deepBlue">
-                Post a job
-              </Button>
-            </Link>
-          )}
+          <Link href={routes.postJob}>
+            <Button className="cursor-pointer bg-deepBlue text-white hover:opacity-90 hover:bg-deepBlue">
+              Post a job
+            </Button>
+          </Link>
 
-          <div className="hidden md:flex items-center gap-2">
+          {/* <div className="hidden md:flex items-center gap-2">
             {status === "authenticated" && (
               <Button
                 className="cursor-pointer bg-red-500 text-white hover:bg-red-400"
@@ -50,7 +47,7 @@ export const Navigation = () => {
                 Logout
               </Button>
             )}
-          </div>
+          </div> */}
           {status === "authenticated" && <SidebarDrawer />}
         </div>
       </div>

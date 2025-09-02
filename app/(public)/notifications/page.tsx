@@ -18,7 +18,7 @@ const Notification = () => {
 
   if (likedJobs?.length > 0) {
     return (
-      <div className="overflow-x-hidden">
+      <div className="overflow-x-hidden max-w-5xl mx-auto">
         <Tabs
           defaultValue="saved-jobs"
           className="flex justify-between items-center flex-col"
@@ -35,7 +35,7 @@ const Notification = () => {
   }
 
   return (
-    <div className="mt-10 bg-white h-[300px] lg:h-[320px] rounded-lg">
+    <div className="mt-10 bg-white h-[300px] lg:h-[320px] rounded-lg max-w-3xl mx-auto">
       <div className="flex items-center justify-center flex-col h-full">
         <Bell size={80} color="#537FE7" />
         <h3 className="font-extrabold pt-2">
